@@ -10,6 +10,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Itof.Core", "Itof.Core\Itof.Core.csproj", "{A2F48AC5-C92B-4024-8059-69A1385AC9D2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Itof.LocalFileSystem", "Itof.LocalFileSystem\Itof.LocalFileSystem.csproj", "{225D27AE-033B-47A4-B6BB-98A7D6CE90C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +24,14 @@ Global
 		{FDB9DF81-65CE-4BAD-AC62-510D66749178}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FDB9DF81-65CE-4BAD-AC62-510D66749178}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FDB9DF81-65CE-4BAD-AC62-510D66749178}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2F48AC5-C92B-4024-8059-69A1385AC9D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2F48AC5-C92B-4024-8059-69A1385AC9D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2F48AC5-C92B-4024-8059-69A1385AC9D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2F48AC5-C92B-4024-8059-69A1385AC9D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{225D27AE-033B-47A4-B6BB-98A7D6CE90C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{225D27AE-033B-47A4-B6BB-98A7D6CE90C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{225D27AE-033B-47A4-B6BB-98A7D6CE90C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{225D27AE-033B-47A4-B6BB-98A7D6CE90C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

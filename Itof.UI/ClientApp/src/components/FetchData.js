@@ -5,7 +5,19 @@ export class FetchData extends Component {
 
   constructor (props) {
     super(props);
-    this.state = { forecasts: [], loading: true };
+      this.state = { forecasts: [], loading: true };
+
+      fetch('api/FileSystem/drives')
+          .then(response => response.json())
+          .then(data => console.log('Drives: ', data));
+
+      fetch('api/FileSystem/dirs')
+          .then(response => response.json())
+          .then(data => console.log('Dirs: ', data));
+
+      fetch('api/FileSystem/files')
+          .then(response => response.json())
+          .then(data => console.log('Files: ', data));
 
     fetch('api/SampleData/WeatherForecasts')
       .then(response => response.json())
