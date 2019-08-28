@@ -11,11 +11,7 @@ export class Home extends Component {
         };
     }
 
-    componentDidMount() {
-        fetch('api/SampleData/folders')
-            .then(response => response.json())
-            .then(data => this.setState({ folders: data }));
-    }
+   
 
     render() {
         console.log(this.state);
