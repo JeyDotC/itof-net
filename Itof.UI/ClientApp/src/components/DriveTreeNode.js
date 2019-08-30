@@ -6,10 +6,8 @@ export default class DriveTreeNode extends Component {
     render() {
         return (
             <Fragment>
-                <div>
-                    <strong>{this.props.drive.name}</strong>
-                </div>
-                <small className="text-silenced">{this.props.drive.totalFreeSpace} available of {this.props.drive.totalSize} </small>
+                <strong>{this.props.drive.name}</strong> <br />
+                <small className="text-muted">{this.props.drive.totalFreeSpace} available of {this.props.drive.totalSize} </small>
             </Fragment>
         );
     }

@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { Container, Row, Col } from 'reactstrap';
+import { NavMenu } from './NavMenu';
+import DirectoryTree from './DirectoryTree'
 
 export class Home extends Component {
     static displayName = Home.name;
@@ -7,18 +10,36 @@ export class Home extends Component {
         super(props);
 
         this.state = {
-            folders: []
+            drives: []
         };
     }
 
-   
+     componentDidMount() {
+        fetch('api/FileSystem/drives')
+            .then(response => response.json())
+            .then(data => this.setState({ drives: data }));
+     }
+
+    handlePathSelected = path => {
+        console.log(path);
+        console.log(this);
+    }
 
     render() {
-        console.log(this.state);
         return (
-            <ul>
-                {this.state.folders.map(folderName => <li>{folderName}</li>)}
-            </ul>
+            <div>
+            <NavMenu />
+            <Container fluid={true}>
+                <Row noGutters={true}>
+                    <Col sm="4">
+                            <DirectoryTree drives={this.state.drives} onPathSelected={this.handlePathSelected} />
+                    </Col>
+                    <Col sm="8">
+
+                    </Col>
+                </Row>
+                </Container>
+            </div>
         );
     }
 }

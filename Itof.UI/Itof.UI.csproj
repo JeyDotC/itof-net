@@ -53,6 +53,10 @@
     <ProjectReference Include="..\Itof.Core\Itof.Core.csproj" />
     <ProjectReference Include="..\Itof.LocalFileSystem\Itof.LocalFileSystem.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="ClientApp\src\components\Layout.js" />
+    <None Remove="ClientApp\src\components\Layout.js" />
+  </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>
       <Properties>
