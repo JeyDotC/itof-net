@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Container, Row, Col } from 'reactstrap';
 import { NavMenu } from './NavMenu';
-import DirectoryTree from './DirectoryTree'
+import DirectoryTree from './DirectoryTree';
+import TableDirectoryView from './directoryViews/TableDirectoryView';
 
 export class Home extends Component {
     static displayName = Home.name;
@@ -10,34 +11,39 @@ export class Home extends Component {
         super(props);
 
         this.state = {
-            drives: []
+            currentPath: '',
+            drives: [],
+            directoriesAtCurrentPath: [],
+            filesAtCurrentPath: []
         };
     }
 
-     componentDidMount() {
+    componentDidMount() {
         fetch('api/FileSystem/drives')
             .then(response => response.json())
             .then(data => this.setState({ drives: data }));
-     }
+    }
 
     handlePathSelected = path => {
-        console.log(path);
-        console.log(this);
+        fetch(`api/FileSystem/dirs?path=${path}`)
+            .then(response => response.json())
+            .then(data => this.setState({ directoriesAtCurrentPath: data }));
+
     }
 
     render() {
         return (
             <div>
-            <NavMenu />
-            <Container fluid={true}>
-                <Row noGutters={true}>
-                    <Col sm="4">
+                <NavMenu />
+                <Container fluid={true}>
+                    <Row noGutters={true}>
+                        <Col sm="4">
                             <DirectoryTree drives={this.state.drives} onPathSelected={this.handlePathSelected} />
-                    </Col>
-                    <Col sm="8">
-
-                    </Col>
-                </Row>
+                        </Col>
+                        <Col sm="8">
+                            <TableDirectoryView directories={this.state.directoriesAtCurrentPath} />
+                        </Col>
+                    </Row>
                 </Container>
             </div>
         );

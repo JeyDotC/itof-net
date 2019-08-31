@@ -76,7 +76,7 @@ namespace Itof.UI
             {
                 Show = false,
             };
-            var mainWindow = await Electron.WindowManager.CreateWindowAsync();
+            var mainWindow = await Electron.WindowManager.CreateWindowAsync(options);
             mainWindow.OnReadyToShow += () => mainWindow.Show();
         }
     }
