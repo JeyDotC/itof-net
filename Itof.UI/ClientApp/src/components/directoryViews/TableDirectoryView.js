@@ -1,6 +1,7 @@
 ﻿import React from 'react';
 import { Table } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faFolder } from '@fortawesome/free-solid-svg-icons'
 
 export default class TableDirectoryView extends React.Component {
     render() {
@@ -15,9 +16,9 @@ export default class TableDirectoryView extends React.Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {this.props.directories.map(d => <tr>
+                    {this.props.directories.map(d => <tr key={d.fullName}>
                         <td>
-                            <FontAwesomeIcon icon="folder" />
+                            <FontAwesomeIcon icon={faFolder} />
                         </td>
                         <th scope="row">{d.name}</th>
                         <td>Otto</td>

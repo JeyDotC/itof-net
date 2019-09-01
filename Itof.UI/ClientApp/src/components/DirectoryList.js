@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 
 export class DirectoryList extends Component {
-    static displayName = DirectoryTree.name;
+    static displayName = DirectoryList.name;
     
     render() {
         return (

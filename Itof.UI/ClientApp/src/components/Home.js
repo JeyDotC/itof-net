@@ -33,14 +33,14 @@ export class Home extends Component {
 
     render() {
         return (
-            <div>
+            <div style={{ paddingTop: '70px' }}>
                 <NavMenu />
                 <Container fluid={true}>
                     <Row noGutters={true}>
-                        <Col sm="4">
+                        <Col lg={3} sm={4}>
                             <DirectoryTree drives={this.state.drives} onPathSelected={this.handlePathSelected} />
                         </Col>
-                        <Col sm="8">
+                        <Col lg={9} sm={8}>
                             <TableDirectoryView directories={this.state.directoriesAtCurrentPath} />
                         </Col>
                     </Row>
