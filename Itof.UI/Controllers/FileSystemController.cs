@@ -27,15 +27,15 @@ namespace Itof.UI.Controllers
         }
 
         [HttpGet("dirs")]
-        public IEnumerable<FileSystemNode> Directories(string path="/")
+        public IEnumerable<FileSystemNode> Directories(string path="/", string orderByName="asc")
         {
-            return _filesystem.ListDirectories(path);
+            return _filesystem.ListDirectories(path).OrderBy(f => f.Name);
         }
 
         [HttpGet("files")]
-        public IEnumerable<FileSystemNode> Files(string path="/")
+        public IEnumerable<FileSystemNode> Files(string path="/", string orderByName = "asc")
         {
-            return _filesystem.ListFiles(path);
+            return _filesystem.ListFiles(path).OrderBy(f => f.Name);
         }
     
     }

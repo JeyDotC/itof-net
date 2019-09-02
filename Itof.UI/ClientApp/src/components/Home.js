@@ -24,24 +24,39 @@ export class Home extends Component {
             .then(data => this.setState({ drives: data }));
     }
 
-    handlePathSelected = path => {
-        fetch(`api/FileSystem/dirs?path=${path}`)
-            .then(response => response.json())
-            .then(data => this.setState({ directoriesAtCurrentPath: data }));
+    handleNavigate = path => {
+        Promise.all([
+            fetch(`api/FileSystem/dirs?path=${path}`),
+            fetch(`api/FileSystem/files?path=${path}`)
+        ]).then(result => {
 
+            Promise.all(result.map(response => response.json()))
+                .then(jsonResults => {
+                    const [dirs, files] = jsonResults;
+                    this.setState({
+                        currentPath: path,
+                        directoriesAtCurrentPath: dirs,
+                        filesAtCurrentPath: files
+                    });
+                });
+        });
     }
 
     render() {
         return (
             <div style={{ paddingTop: '70px' }}>
-                <NavMenu />
+                <NavMenu currentPath={this.state.currentPath} onNavigate={this.handleNavigate} />
                 <Container fluid={true}>
                     <Row noGutters={true}>
                         <Col lg={3} sm={4}>
-                            <DirectoryTree drives={this.state.drives} onPathSelected={this.handlePathSelected} />
+                            <DirectoryTree drives={this.state.drives} onNavigate={this.handleNavigate} />
                         </Col>
                         <Col lg={9} sm={8}>
-                            <TableDirectoryView directories={this.state.directoriesAtCurrentPath} />
+                            <TableDirectoryView
+                                directories={this.state.directoriesAtCurrentPath}
+                                files={this.state.filesAtCurrentPath}
+                                onNavigate={this.handleNavigate}
+                            />
                         </Col>
                     </Row>
                 </Container>

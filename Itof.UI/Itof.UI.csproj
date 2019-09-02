@@ -20,7 +20,6 @@
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
     <Content Remove="$(SpaRoot)**" />
-    <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->
@@ -38,7 +37,7 @@
     <!-- Include the newly-built files in the publish output -->
     <ItemGroup>
       <DistFiles Include="$(SpaRoot)build\**" />
-      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+      <ResolvedFileToPublish Include="@(DistFiles-&gt;'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
         <RelativePath>%(DistFiles.Identity)</RelativePath>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </ResolvedFileToPublish>
@@ -54,8 +53,10 @@
     <ProjectReference Include="..\Itof.LocalFileSystem\Itof.LocalFileSystem.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="ClientApp\src\components\Layout.js" />
-    <None Remove="ClientApp\src\components\Layout.js" />
+    <None Remove="ClientApp\.gitignore" />
+    <None Remove="ClientApp\package-lock.json" />
+    <None Remove="ClientApp\package.json" />
+    <None Remove="ClientApp\public\favicon.ico" />
   </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>
