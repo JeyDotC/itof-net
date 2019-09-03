@@ -7,10 +7,11 @@ export default class DirectoryTree extends Component {
 
     render() {
         return (
-            <Nav vertical={true} className={"position-fixed"}>
-                {this.props.drives.map(drive => <NavLink key={drive.name} href="#" onClick={() => this.props.onNavigate(drive.rootDirectory)}>
-                    <DriveTreeNode drive={drive} />
-                </NavLink>)}
+            <Nav vertical={true} size={'sm'} className={"position-fixed"}>
+                {this.props.drives.map(drive =>
+                    <NavLink key={drive.name} className={'small'} href="#" onClick={() => this.props.onNavigate(drive.rootDirectory)}>
+                        <DriveTreeNode drive={drive} />
+                    </NavLink>)}
             </Nav>
         );
     }

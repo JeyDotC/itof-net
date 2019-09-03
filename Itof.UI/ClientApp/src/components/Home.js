@@ -3,6 +3,7 @@ import { Container, Row, Col } from 'reactstrap';
 import { NavMenu } from './NavMenu';
 import DirectoryTree from './DirectoryTree';
 import TableDirectoryView from './directoryViews/TableDirectoryView';
+import ContextMenu from './ContextMenu'
 
 export class Home extends Component {
     static displayName = Home.name;
@@ -14,7 +15,9 @@ export class Home extends Component {
             currentPath: '',
             drives: [],
             directoriesAtCurrentPath: [],
-            filesAtCurrentPath: []
+            filesAtCurrentPath: [],
+            contextMenuOpen: false,
+            contextMenuPosition: {x: 0, y: 0}
         };
     }
 
@@ -36,9 +39,18 @@ export class Home extends Component {
                     this.setState({
                         currentPath: path,
                         directoriesAtCurrentPath: dirs,
-                        filesAtCurrentPath: files
+                        filesAtCurrentPath: files,
+                        contextMenuOpen: false
                     });
                 });
+        });
+    }
+
+    handleContextMenu = (fileSystemEntry, e) => {
+        e.preventDefault();
+        this.setState({
+            contextMenuOpen: true,
+            contextMenuPosition: {x: e.clientX, y: e.clientY}
         });
     }
 
@@ -56,10 +68,15 @@ export class Home extends Component {
                                 directories={this.state.directoriesAtCurrentPath}
                                 files={this.state.filesAtCurrentPath}
                                 onNavigate={this.handleNavigate}
+                                onContextMenu={this.handleContextMenu}
                             />
                         </Col>
                     </Row>
                 </Container>
+                <ContextMenu
+                    show={this.state.contextMenuOpen}
+                    x={this.state.contextMenuPosition.x}
+                    y={this.state.contextMenuPosition.y} />
             </div>
         );
     }

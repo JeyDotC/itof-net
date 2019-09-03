@@ -1,25 +1,27 @@
 ﻿import React, { Component } from 'react';
-import { Breadcrumb, BreadcrumbItem } from 'reactstrap';
+import { ButtonGroup, Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import './NavMenu.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faHdd } from '@fortawesome/free-solid-svg-icons'
 
 export default class DirectoryBar extends Component {
     static displayName = DirectoryBar.name;
 
-    renderPart = (path, part) => <BreadcrumbItem key={path} tag={"a"} href="#" onClick={() => this.props.onNavigate(path)}>{part}</BreadcrumbItem>;
+    renderPart = (path, part) => <Button key={path} color={'default'} onClick={() => this.props.onNavigate(path)}>{part} &rsaquo;</Button>;
 
     render() {
         const parts = this.props.currentPath.split('/');
         let root = '/';
         return (
-            <Breadcrumb className={'list-group-horizontal'}>
-                {this.renderPart(root, 'Root')}
+            <ButtonGroup size={'sm'}>
+                {this.renderPart(root, <FontAwesomeIcon icon={faHdd} />)}
                 {parts.filter(part => part.length != 0).map((part, index) => {
                     let path = `${root}/${part}`;
                     root = path;
                     return this.renderPart(root, part);
                 })}
-            </Breadcrumb>
+            </ButtonGroup>
         );
     }
 }

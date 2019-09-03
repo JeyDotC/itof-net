@@ -26,9 +26,7 @@ export class NavMenu extends Component {
         return (
             <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3" fixed={"top"} light={true}>
                 <Container>
-                    <div className="collapse navbar-collapse">
-                        <DirectoryBar className="navbar-left" currentPath={this.props.currentPath || ''} onNavigate={this.props.onNavigate} />
-                    </div>
+                    <DirectoryBar className="navbar-left" currentPath={this.props.currentPath || ''} onNavigate={this.props.onNavigate} />
                 </Container>
             </Navbar>
         );
