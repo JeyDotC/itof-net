@@ -11,12 +11,14 @@ export default class DirectoryBar extends Component {
     renderPart = (path, part) => <Button key={path} color={'default'} onClick={() => this.props.onNavigate(path)}>{part} &rsaquo;</Button>;
 
     render() {
-        const parts = this.props.currentPath.split('/');
-        let root = '/';
+        const parts = this.props.currentPath.split('/').filter(part => part.length !== 0);
+        let root = parts.shift();
         return (
             <ButtonGroup size={'sm'}>
-                {this.renderPart(root, <FontAwesomeIcon icon={faHdd} />)}
-                {parts.filter(part => part.length != 0).map((part, index) => {
+                {this.renderPart(root, <React.Fragment>
+                    <FontAwesomeIcon icon={faHdd} /> {root || '/'}
+                </React.Fragment>)}
+                {parts.map(part => {
                     let path = `${root}/${part}`;
                     root = path;
                     return this.renderPart(root, part);
