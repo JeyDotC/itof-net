@@ -17,7 +17,8 @@ export class Home extends Component {
             directoriesAtCurrentPath: [],
             filesAtCurrentPath: [],
             contextMenuOpen: false,
-            contextMenuPosition: {x: 0, y: 0}
+            contextMenuPosition: { x: 0, y: 0 },
+            currentFileSystemEntry: undefined
         };
     }
 
@@ -50,7 +51,8 @@ export class Home extends Component {
         e.preventDefault();
         this.setState({
             contextMenuOpen: true,
-            contextMenuPosition: {x: e.clientX, y: e.clientY}
+            contextMenuPosition: { x: e.clientX, y: e.clientY },
+            currentFileSystemEntry: fileSystemEntry
         });
     }
 
@@ -74,6 +76,7 @@ export class Home extends Component {
                     </Row>
                 </Container>
                 <ContextMenu
+                    selectedItem={this.state.currentFileSystemEntry}
                     show={this.state.contextMenuOpen}
                     x={this.state.contextMenuPosition.x}
                     y={this.state.contextMenuPosition.y} />

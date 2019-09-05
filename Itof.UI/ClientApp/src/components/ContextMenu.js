@@ -2,6 +2,11 @@
 import { DropdownMenu, DropdownItem } from 'reactstrap';
 
 export default class ContextMenu extends React.Component {
+
+    handleCopyAsPath = () => {
+        navigator.clipboard.writeText(this.props.selectedItem.fullName);
+    }
+
     render() {
         return (<div className="dropdown-menu" style={{
             display: this.props.show ? 'block' : 'none',
@@ -9,9 +14,7 @@ export default class ContextMenu extends React.Component {
             left: this.props.x,
             top: this.props.y
         }}>
-            <a className="dropdown-item" href="#">Action</a>
-            <a className="dropdown-item" href="#">Another action</a>
-            <a className="dropdown-item" href="#">Something else here</a>
+            <button className="dropdown-item" type="button" onClick={this.handleCopyAsPath}>Copy Path</button>
         </div>);
     }
 }

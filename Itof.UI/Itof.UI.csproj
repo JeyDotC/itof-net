@@ -51,6 +51,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Itof.Core\Itof.Core.csproj" />
     <ProjectReference Include="..\Itof.LocalFileSystem\Itof.LocalFileSystem.csproj" />
+    <ProjectReference Include="..\Itof.ProcessLauncher\Itof.ProcessLauncher.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="ClientApp\.gitignore" />
