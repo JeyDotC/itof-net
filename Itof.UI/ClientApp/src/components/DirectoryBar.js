@@ -11,7 +11,9 @@ export default class DirectoryBar extends Component {
     renderPart = (path, part) => <Button key={path} color={'default'} onClick={() => this.props.onNavigate(path)}>{part} &rsaquo;</Button>;
 
     render() {
-        const parts = this.props.currentPath.split('/').filter(part => part.length !== 0);
+        const currentPath = this.props.currentPath;
+        const parts = [(currentPath.startsWith('/') ? '/' : ''), ...currentPath.split('/')].filter(part => part.length !== 0);
+        console.log({ currentPath, parts });
         let root = parts.shift();
         return (
             <ButtonGroup size={'sm'}>

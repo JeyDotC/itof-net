@@ -5,7 +5,7 @@ export default class ContextMenu extends React.Component {
     render() {
         return (<div className="dropdown-menu" style={{
             display: this.props.show ? 'block' : 'none',
-            position: 'absolute',
+            position: 'fixed',
             left: this.props.x,
             top: this.props.y
         }}>

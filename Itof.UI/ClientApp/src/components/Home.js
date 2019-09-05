@@ -56,7 +56,7 @@ export class Home extends Component {
 
     render() {
         return (
-            <div style={{ paddingTop: '70px' }}>
+            <div style={{ paddingTop: '70px' }} onClick={() => this.setState({contextMenuOpen: false})}>
                 <NavMenu currentPath={this.state.currentPath} onNavigate={this.handleNavigate} />
                 <Container fluid={true}>
                     <Row noGutters={true}>
