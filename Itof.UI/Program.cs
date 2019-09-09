@@ -4,10 +4,13 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using ElectronNET.API;
+using Itof.ProcessLauncher;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+
+[assembly: Ref]
 
 namespace Itof.UI
 {
