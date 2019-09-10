@@ -28,6 +28,17 @@ export class Home extends Component {
             .then(data => this.setState({ drives: data }));
     }
 
+    handleItemOpen = item => {
+        const isFolder = item.kind === 0;
+        if (isFolder) {
+            this.handleNavigate(item.fullName);
+        }
+    }
+
+    handleItemSelected = item => {
+        this.setState({ currentFileSystemEntry: item });
+    }
+
     handleNavigate = path => {
         Promise.all([
             fetch(`api/FileSystem/dirs?path=${path}`),
@@ -67,9 +78,11 @@ export class Home extends Component {
                         </Col>
                         <Col lg={9} sm={8}>
                             <TableDirectoryView
+                                currentFileSystemEntry={this.state.currentFileSystemEntry}
                                 directories={this.state.directoriesAtCurrentPath}
                                 files={this.state.filesAtCurrentPath}
-                                onNavigate={this.handleNavigate}
+                                onItemSelected={this.handleItemSelected}
+                                onItemOpen={this.handleItemOpen}
                                 onContextMenu={this.handleContextMenu}
                             />
                         </Col>

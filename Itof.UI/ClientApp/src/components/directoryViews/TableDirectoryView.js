@@ -6,7 +6,61 @@ import './TableDirectoryView.css';
 import classNames from 'classnames';
 
 export default class TableDirectoryView extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            currentItemKey: undefined,
+            lastClick: 0
+        };
+    }
+
+    handleClick = (pickedElement) => {
+        const newItemKey = pickedElement.fullName;
+        const currentTime = Date.now();
+        // First click on an element.
+        if (this.state.currentItemKey !== newItemKey) {
+            this.setState({ currentItemKey: newItemKey });
+            this.props.onItemSelected(pickedElement);
+        }else
+        // Second click on an element.
+        if ((currentTime - this.state.lastClick) <= 500) {
+            this.props.onItemOpen(pickedElement);
+        }
+
+        this.setState({ lastClick: currentTime });
+    }
+
+    isHidden = name => name.startsWith('.');
+
+    renderFileSystemEntry({ entry, icon, color = undefined }) {
+        const isFolder = entry.kind === 0;
+        const isFile = entry.kind === 1;
+        const isCurrentlyPickedEntry = entry.fullName === (this.props.currentFileSystemEntry || {fullName:undefined}).fullName;
+        const classes = {
+            'text-muted': this.isHidden(entry.name),
+            'directory-row': isFolder,
+            'file-row': isFile,
+            'bg-primary': isCurrentlyPickedEntry
+        };
+
+
+        return (<tr className={classNames(classes)}
+            onContextMenu={e => this.props.onContextMenu(entry, e)}
+            onClick={() => this.handleClick(entry)} >
+                        <td>
+                            <FontAwesomeIcon icon={icon} color={color} />
+                        </td>
+                        <th scope="row">{entry.name}</th>
+                        <td>Otto</td>
+                        <td>@mdo</td>
+                    </tr>);
+    }
+
     render() {
+        const FileSystemEntry = props => this.renderFileSystemEntry(props);
+
         return (
             <Table size={'sm'} hover={true} className={'table-directory-view'}>
                 <thead>
@@ -18,24 +72,8 @@ export default class TableDirectoryView extends React.Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {this.props.directories.map(d => <tr key={d.fullName} className={classNames('directory-row', { 'text-muted': d.name.startsWith('.') })}
-                        onContextMenu={e => this.props.onContextMenu(d, e)}
-                        onClick={() => this.props.onNavigate(d.fullName)}>
-                        <td>
-                            <FontAwesomeIcon icon={faFolder} color={'brown'} />
-                        </td>
-                        <th scope="row">{d.name}</th>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                    </tr>)}
-                    {this.props.files.map(f => <tr key={f.fullName} className={classNames('file-row', { 'text-muted': f.name.startsWith('.') })}>
-                        <td>
-                            <FontAwesomeIcon icon={faFile} />
-                        </td>
-                        <th scope="row">{f.name}</th>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                    </tr>)}
+                    {this.props.directories.map(d => <FileSystemEntry key={d.fullName} entry={d} icon={faFolder} color={'brown'} />)}
+                    {this.props.files.map(f => <FileSystemEntry key={f.fullName}  entry={f} icon={faFile} />)}
                 </tbody>
             </Table>
         );
