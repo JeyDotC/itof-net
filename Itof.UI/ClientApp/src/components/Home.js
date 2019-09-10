@@ -30,10 +30,18 @@ export class Home extends Component {
 
     handleItemOpen = item => {
         const isFolder = item.kind === 0;
+        const isFile = item.kind === 1;
+
         if (isFolder) {
             this.handleNavigate(item.fullName);
+        } else if (isFile) {
+            this.openFile(item.fullName);
         }
     }
+
+    openFile = fullName => fetch(`/api/Process/OsOpen?file=${fullName}`, {
+            method: 'POST'
+        });
 
     handleItemSelected = item => {
         this.setState({ currentFileSystemEntry: item });
@@ -60,16 +68,22 @@ export class Home extends Component {
 
     handleContextMenu = (fileSystemEntry, e) => {
         e.preventDefault();
-        this.setState({
-            contextMenuOpen: true,
-            contextMenuPosition: { x: e.clientX, y: e.clientY },
-            currentFileSystemEntry: fileSystemEntry
-        });
+        e.stopPropagation();
+
+        if (fileSystemEntry !== undefined) {
+            this.setState({
+                contextMenuOpen: true,
+                contextMenuPosition: { x: e.clientX, y: e.clientY },
+                currentFileSystemEntry: fileSystemEntry
+            });
+        }
     }
 
     render() {
         return (
-            <div style={{ paddingTop: '70px' }} onClick={() => this.setState({contextMenuOpen: false})}>
+            <div style={{ paddingTop: '70px', minHeight: '600px' }}
+                onClick={() => this.setState({ contextMenuOpen: false })}
+                onContextMenu={e => this.handleContextMenu({ fullName: this.state.currentPath, kind: 0 }, e)}>
                 <NavMenu currentPath={this.state.currentPath} onNavigate={this.handleNavigate} />
                 <Container fluid={true}>
                     <Row noGutters={true}>
@@ -85,6 +99,7 @@ export class Home extends Component {
                                 onItemOpen={this.handleItemOpen}
                                 onContextMenu={this.handleContextMenu}
                             />
+                            <div id="bottom-gutter" style={{ height: '300px' }} />
                         </Col>
                     </Row>
                 </Container>

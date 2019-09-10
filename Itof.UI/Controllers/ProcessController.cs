@@ -3,6 +3,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Collections;
+using System.IO;
 
 namespace Itof.UI.Controllers
 {
@@ -13,16 +14,41 @@ namespace Itof.UI.Controllers
         [HttpPost("{process}")]
         public void Start(string process, string at, string p)
         {
-            var processInfo = new ProcessStartInfo
+            RunProcess(process, at, p);
+        }
+
+        [HttpPost("OsTerminal")]
+        public void OpenTerminal(string at)
+        {
+            switch(Environment.OSVersion.Platform)
+            {
+                case PlatformID.Unix:
+                    RunProcess("open", at, $"-a Terminal {at}");
+                    break;
+            }
+        }
+
+        [HttpPost("OsOpen")]
+        public void OpenFile(string file)
+        {
+            var fileInfo = new FileInfo(file);
+
+            switch (Environment.OSVersion.Platform)
+            {
+                case PlatformID.Unix:
+                    RunProcess("open", fileInfo.DirectoryName, fileInfo.FullName);
+                    break;
+            }
+        }
+
+        private Process RunProcess(string process, string workingDir, string parameters)
+            => Process.Start(new ProcessStartInfo
             {
                 FileName = "dotnet",
-                WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden,
+                WindowStyle = ProcessWindowStyle.Hidden,
                 WorkingDirectory = AppContext.BaseDirectory,
 
-                Arguments = string.Join(' ', "./Itof.ProcessLauncher.dll", process, at ?? ".", p ?? string.Empty)
-            };
-
-            var thing = Process.Start(processInfo);
-        }
+                Arguments = string.Join(' ', "./Itof.ProcessLauncher.dll", process, workingDir ?? ".", parameters ?? string.Empty)
+            });
     }
 }

@@ -42,19 +42,17 @@ export default class TableDirectoryView extends React.Component {
             'text-muted': this.isHidden(entry.name),
             'directory-row': isFolder,
             'file-row': isFile,
-            'bg-primary': isCurrentlyPickedEntry
+            'table-primary': isCurrentlyPickedEntry
         };
 
 
         return (<tr className={classNames(classes)}
-            onContextMenu={e => this.props.onContextMenu(entry, e)}
-            onClick={() => this.handleClick(entry)} >
+                    onContextMenu={e => this.props.onContextMenu(entry, e)}
+                    onClick={() => this.handleClick(entry)} >
                         <td>
                             <FontAwesomeIcon icon={icon} color={color} />
                         </td>
                         <th scope="row">{entry.name}</th>
-                        <td>Otto</td>
-                        <td>@mdo</td>
                     </tr>);
     }
 
@@ -67,8 +65,6 @@ export default class TableDirectoryView extends React.Component {
                     <tr>
                         <th>#</th>
                         <th>Name</th>
-                        <th>Last Name</th>
-                        <th>Username</th>
                     </tr>
                 </thead>
                 <tbody>
