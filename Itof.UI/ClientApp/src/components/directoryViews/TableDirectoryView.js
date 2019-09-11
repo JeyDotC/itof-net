@@ -7,6 +7,27 @@ import classNames from 'classnames';
 
 export default class TableDirectoryView extends React.Component {
 
+    static IconMap = {
+        'image': ['fab', 'image'],
+        // Text
+        'plain': ['fab', 'file-alt'],
+        'css': ['fab', 'css3-alt'],
+        'csv': ['fab', 'file-csv'],
+        'html': ['fab', 'file-code'],
+        'calendar': ['fab', 'calendar'],
+        // Application
+        'octet-stream': ['fab', 'file'],
+
+        getByMime(mime) {
+            if (!mime) {
+                return this['octet-stream'];
+            }
+            const [mainType, subType] = mime.split('/');
+
+            return this[mainType] || this[subType] || this['octet-stream'];
+        }
+    };
+
     constructor(props) {
         super(props);
 
@@ -23,11 +44,11 @@ export default class TableDirectoryView extends React.Component {
         if (this.state.currentItemKey !== newItemKey) {
             this.setState({ currentItemKey: newItemKey });
             this.props.onItemSelected(pickedElement);
-        }else
-        // Second click on an element.
-        if ((currentTime - this.state.lastClick) <= 500) {
-            this.props.onItemOpen(pickedElement);
-        }
+        } else
+            // Second click on an element.
+            if ((currentTime - this.state.lastClick) <= 500) {
+                this.props.onItemOpen(pickedElement);
+            }
 
         this.setState({ lastClick: currentTime });
     }
@@ -37,7 +58,7 @@ export default class TableDirectoryView extends React.Component {
     renderFileSystemEntry({ entry, icon, color = undefined }) {
         const isFolder = entry.kind === 0;
         const isFile = entry.kind === 1;
-        const isCurrentlyPickedEntry = entry.fullName === (this.props.currentFileSystemEntry || {fullName:undefined}).fullName;
+        const isCurrentlyPickedEntry = entry.fullName === (this.props.currentFileSystemEntry || { fullName: undefined }).fullName;
         const classes = {
             'text-muted': this.isHidden(entry.name),
             'directory-row': isFolder,
@@ -47,13 +68,13 @@ export default class TableDirectoryView extends React.Component {
 
 
         return (<tr className={classNames(classes)}
-                    onContextMenu={e => this.props.onContextMenu(entry, e)}
-                    onClick={() => this.handleClick(entry)} >
-                        <td>
-                            <FontAwesomeIcon icon={icon} color={color} />
-                        </td>
-                        <th scope="row">{entry.name}</th>
-                    </tr>);
+            onContextMenu={e => this.props.onContextMenu(entry, e)}
+            onClick={() => this.handleClick(entry)} >
+            <td>
+                <FontAwesomeIcon icon={TableDirectoryView.IconMap.getByMime(entry.mime)} color={color} />
+            </td>
+            <th scope="row">{entry.name}</th>
+        </tr>);
     }
 
     render() {
@@ -76,7 +97,7 @@ export default class TableDirectoryView extends React.Component {
                 <tbody>
                     {currentDirectoryParts.length > 0 && <FileSystemEntry entry={upperFile} icon={faFolder} color={'brown'} />}
                     {this.props.directories.map(d => <FileSystemEntry key={d.fullName} entry={d} icon={faFolder} color={'brown'} />)}
-                    {this.props.files.map(f => <FileSystemEntry key={f.fullName}  entry={f} icon={faFile} />)}
+                    {this.props.files.map(f => <FileSystemEntry key={f.fullName} entry={f} icon={faFile} />)}
                 </tbody>
             </Table>
         );

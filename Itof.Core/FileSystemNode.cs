@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.StaticFiles;
+using System;
 using System.Linq;
 
 namespace Itof.Core
@@ -21,6 +22,8 @@ namespace Itof.Core
 
         public FileSystemNodeKind Kind { get; }
 
+        public string Mime { get; }
+
         public FileSystemNode(string name, string extension, string fullName, string directory, DateTime dateCreated, DateTime dateModified, long size, FileSystemNodeKind kind)
             : this()
         {
@@ -32,6 +35,11 @@ namespace Itof.Core
             DateModified = dateModified;
             Size = size;
             Kind = kind;
+            if (kind == FileSystemNodeKind.File && !string.IsNullOrWhiteSpace(extension))
+            {
+                new FileExtensionContentTypeProvider().Mappings.TryGetValue($".{extension}", out var mime);
+                Mime = mime ?? "application/octet-stream";
+            }
         }
 
         public static FileSystemNode CreateDirectory(string name, string baseDir, DateTime dateCreated, DateTime dateModified, string separator = "/")
