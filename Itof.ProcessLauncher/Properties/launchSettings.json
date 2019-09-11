@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Itof.ProcessLauncher": {
+      "commandName": "Project",
+      "commandLineArgs": "cmd E:\\/VSProjects "
+    }
+  }
+}

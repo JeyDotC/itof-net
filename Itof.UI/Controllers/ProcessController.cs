@@ -25,6 +25,10 @@ namespace Itof.UI.Controllers
                 case PlatformID.Unix:
                     RunProcess("open", at, $"-a Terminal {at}");
                     break;
+
+                case PlatformID.Win32NT:
+                    RunProcess("cmd", at, string.Empty);
+                    break;
             }
         }
 
@@ -37,6 +41,10 @@ namespace Itof.UI.Controllers
             {
                 case PlatformID.Unix:
                     RunProcess("open", fileInfo.DirectoryName, fileInfo.FullName);
+                    break;
+
+                case PlatformID.Win32NT:
+                    RunProcess("cmd", fileInfo.DirectoryName, $"/c start \"{fileInfo.FullName}\"");
                     break;
             }
         }

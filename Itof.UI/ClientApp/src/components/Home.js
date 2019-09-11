@@ -92,6 +92,7 @@ export class Home extends Component {
                         </Col>
                         <Col lg={9} sm={8}>
                             <TableDirectoryView
+                                currentPath={this.state.currentPath}
                                 currentFileSystemEntry={this.state.currentFileSystemEntry}
                                 directories={this.state.directoriesAtCurrentPath}
                                 files={this.state.filesAtCurrentPath}

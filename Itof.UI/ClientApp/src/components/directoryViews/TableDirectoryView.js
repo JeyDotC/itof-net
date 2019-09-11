@@ -58,7 +58,13 @@ export default class TableDirectoryView extends React.Component {
 
     render() {
         const FileSystemEntry = props => this.renderFileSystemEntry(props);
-
+        let currentDirectoryParts = this.props.currentPath.split('/');
+        currentDirectoryParts.pop();
+        const upperFile = {
+            fullName: currentDirectoryParts.join('/'),
+            kind: 0,
+            name: ' ..'
+        };
         return (
             <Table size={'sm'} hover={true} className={'table-directory-view'}>
                 <thead>
@@ -68,6 +74,7 @@ export default class TableDirectoryView extends React.Component {
                     </tr>
                 </thead>
                 <tbody>
+                    {currentDirectoryParts.length > 0 && <FileSystemEntry entry={upperFile} icon={faFolder} color={'brown'} />}
                     {this.props.directories.map(d => <FileSystemEntry key={d.fullName} entry={d} icon={faFolder} color={'brown'} />)}
                     {this.props.files.map(f => <FileSystemEntry key={f.fullName}  entry={f} icon={faFile} />)}
                 </tbody>
