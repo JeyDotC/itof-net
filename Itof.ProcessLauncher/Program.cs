@@ -22,13 +22,16 @@ namespace Itof.ProcessLauncher
 
             Console.Out.WriteLine(workingDir);
 
-            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+            using (System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
             {
                 FileName = process,
                 WorkingDirectory = workingDir,
                 Arguments = string.Join(' ', arguments),
                 WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden
-            });
+            }))
+            {
+
+            }
         }
     }
 }

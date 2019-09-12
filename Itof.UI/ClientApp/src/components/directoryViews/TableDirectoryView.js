@@ -1,48 +1,10 @@
 ﻿import React from 'react';
 import { Table } from 'reactstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { fas } from '@fortawesome/free-solid-svg-icons'
-import { fab } from '@fortawesome/free-brands-svg-icons'
 import './TableDirectoryView.css';
 import classNames from 'classnames';
-
-library.add(fas);
-library.add(fab);
+import FileSystemEntryIcon from '../FileSystemEntryIcon';
 
 export default class TableDirectoryView extends React.Component {
-
-    static IconMap = {
-        'image': 'image',
-        'audio': 'volume-up',
-        'video': 'film',
-        // Text
-        'plain': 'file-alt',
-        'css': 'css3-alt',
-        'csv': 'file-csv',
-        'html': 'file-code',
-        'calendar': 'calendar',
-        // Application
-        'xml': 'code',
-        'json': ['fab', 'js'],
-        'js': ['fab', 'js'],
-        'javascript': ['fab', 'js'],
-        'octet-stream': 'file',
-        'x-compressed': 'file-archive',
-        'x-zip-compressed': 'file-archive',
-        'x-zip': 'file-archive',
-        'zip': 'file-archive',
-        'pdf': 'file-pdf',
-
-        getByMime(mime) {
-            if (!mime) {
-                return this['octet-stream'];
-            }
-            const [mainType, subType] = mime.split('/');
-
-            return this[mainType] || this[subType] || this['octet-stream'];
-        }
-    };
 
     constructor(props) {
         super(props);
@@ -75,19 +37,19 @@ export default class TableDirectoryView extends React.Component {
         const isFolder = entry.kind === 0;
         const isFile = entry.kind === 1;
         const isCurrentlyPickedEntry = entry.fullName === (this.props.currentFileSystemEntry || { fullName: undefined }).fullName;
+
         const classes = {
             'text-muted': this.isHidden(entry.name),
             'directory-row': isFolder,
             'file-row': isFile,
             'table-primary': isCurrentlyPickedEntry
         };
-        const icon = isFolder ? 'folder' : TableDirectoryView.IconMap.getByMime(entry.mime);
 
         return (<tr className={classNames(classes)}
             onContextMenu={e => this.props.onContextMenu(entry, e)}
             onClick={() => this.handleClick(entry)} >
             <td>
-                <FontAwesomeIcon icon={icon} color={color} size={'1x'} />
+                <FileSystemEntryIcon entry={entry} color={color} />
             </td>
             <th scope="row">{entry.name}</th>
         </tr>);

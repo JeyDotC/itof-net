@@ -70,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />
+    <Folder Include="ClientApp\src\services\" />
   </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>
