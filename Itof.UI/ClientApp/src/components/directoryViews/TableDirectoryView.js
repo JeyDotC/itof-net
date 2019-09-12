@@ -1,22 +1,38 @@
 ﻿import React from 'react';
 import { Table } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFolder, faFile } from '@fortawesome/free-solid-svg-icons'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { fas } from '@fortawesome/free-solid-svg-icons'
+import { fab } from '@fortawesome/free-brands-svg-icons'
 import './TableDirectoryView.css';
 import classNames from 'classnames';
+
+library.add(fas);
+library.add(fab);
 
 export default class TableDirectoryView extends React.Component {
 
     static IconMap = {
-        'image': ['fab', 'image'],
+        'image': 'image',
+        'audio': 'volume-up',
+        'video': 'film',
         // Text
-        'plain': ['fab', 'file-alt'],
-        'css': ['fab', 'css3-alt'],
-        'csv': ['fab', 'file-csv'],
-        'html': ['fab', 'file-code'],
-        'calendar': ['fab', 'calendar'],
+        'plain': 'file-alt',
+        'css': 'css3-alt',
+        'csv': 'file-csv',
+        'html': 'file-code',
+        'calendar': 'calendar',
         // Application
-        'octet-stream': ['fab', 'file'],
+        'xml': 'code',
+        'json': ['fab', 'js'],
+        'js': ['fab', 'js'],
+        'javascript': ['fab', 'js'],
+        'octet-stream': 'file',
+        'x-compressed': 'file-archive',
+        'x-zip-compressed': 'file-archive',
+        'x-zip': 'file-archive',
+        'zip': 'file-archive',
+        'pdf': 'file-pdf',
 
         getByMime(mime) {
             if (!mime) {
@@ -55,7 +71,7 @@ export default class TableDirectoryView extends React.Component {
 
     isHidden = name => name.startsWith('.');
 
-    renderFileSystemEntry({ entry, icon, color = undefined }) {
+    renderFileSystemEntry({ entry, color = undefined }) {
         const isFolder = entry.kind === 0;
         const isFile = entry.kind === 1;
         const isCurrentlyPickedEntry = entry.fullName === (this.props.currentFileSystemEntry || { fullName: undefined }).fullName;
@@ -65,13 +81,13 @@ export default class TableDirectoryView extends React.Component {
             'file-row': isFile,
             'table-primary': isCurrentlyPickedEntry
         };
-
+        const icon = isFolder ? 'folder' : TableDirectoryView.IconMap.getByMime(entry.mime);
 
         return (<tr className={classNames(classes)}
             onContextMenu={e => this.props.onContextMenu(entry, e)}
             onClick={() => this.handleClick(entry)} >
             <td>
-                <FontAwesomeIcon icon={TableDirectoryView.IconMap.getByMime(entry.mime)} color={color} />
+                <FontAwesomeIcon icon={icon} color={color} size={'1x'} />
             </td>
             <th scope="row">{entry.name}</th>
         </tr>);
@@ -95,9 +111,9 @@ export default class TableDirectoryView extends React.Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {currentDirectoryParts.length > 0 && <FileSystemEntry entry={upperFile} icon={faFolder} color={'brown'} />}
-                    {this.props.directories.map(d => <FileSystemEntry key={d.fullName} entry={d} icon={faFolder} color={'brown'} />)}
-                    {this.props.files.map(f => <FileSystemEntry key={f.fullName} entry={f} icon={faFile} />)}
+                    {currentDirectoryParts.length > 0 && <FileSystemEntry entry={upperFile} color={'brown'} />}
+                    {this.props.directories.map(d => <FileSystemEntry key={d.fullName} entry={d} color={'brown'} />)}
+                    {this.props.files.map(f => <FileSystemEntry key={f.fullName} entry={f}  />)}
                 </tbody>
             </Table>
         );

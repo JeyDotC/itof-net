@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.StaticFiles;
-using System;
+﻿using System;
 using System.Linq;
 
 namespace Itof.Core
@@ -24,7 +23,7 @@ namespace Itof.Core
 
         public string Mime { get; }
 
-        public FileSystemNode(string name, string extension, string fullName, string directory, DateTime dateCreated, DateTime dateModified, long size, FileSystemNodeKind kind)
+        public FileSystemNode(string name, string extension, string fullName, string directory, DateTime dateCreated, DateTime dateModified, long size, FileSystemNodeKind kind, string mime="")
             : this()
         {
             Name = name;
@@ -35,18 +34,14 @@ namespace Itof.Core
             DateModified = dateModified;
             Size = size;
             Kind = kind;
-            if (kind == FileSystemNodeKind.File && !string.IsNullOrWhiteSpace(extension))
-            {
-                new FileExtensionContentTypeProvider().Mappings.TryGetValue($".{extension}", out var mime);
-                Mime = mime ?? "application/octet-stream";
-            }
+            Mime = mime;
         }
 
         public static FileSystemNode CreateDirectory(string name, string baseDir, DateTime dateCreated, DateTime dateModified, string separator = "/")
          => new FileSystemNode(name, string.Empty, $"{baseDir}{separator}{name}", baseDir, dateCreated, dateModified, 0, FileSystemNodeKind.Directory);
 
-        public static FileSystemNode CreateFile(string nameWithExtension, string baseDir, DateTime dateCreated, DateTime dateModified, long size, string separator = "/")
-         => new FileSystemNode(nameWithExtension, nameWithExtension.Split('.').LastOrDefault() ?? string.Empty, $"{baseDir}{separator}{nameWithExtension}", baseDir, dateCreated, dateModified, size, FileSystemNodeKind.File);
+        public static FileSystemNode CreateFile(string nameWithExtension, string baseDir, DateTime dateCreated, DateTime dateModified, long size, string separator = "/", string mime="application/octect-stream")
+         => new FileSystemNode(nameWithExtension, nameWithExtension.Split('.').LastOrDefault() ?? string.Empty, $"{baseDir}{separator}{nameWithExtension}", baseDir, dateCreated, dateModified, size, FileSystemNodeKind.File, mime: mime);
 
         public static FileSystemNode CreateDrive(string route, long size)
          => new FileSystemNode(route, string.Empty, string.Empty, route, DateTime.MinValue, DateTime.MinValue, size, FileSystemNodeKind.Drive);

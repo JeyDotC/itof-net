@@ -9,6 +9,13 @@ namespace Itof.LocalFileSystem
 {
     public class LocalFileSystemService : IFileSystemService
     {
+        private IMimeMapService _mimeMapService;
+
+        public LocalFileSystemService(IMimeMapService mimeMapService)
+        {
+            _mimeMapService = mimeMapService;
+        }
+
         public IEnumerable<FileSystemNode> ListDirectories(string path)
             => new DirectoryInfo(path).EnumerateDirectories()
                 .Select(d => FileSystemNode.CreateDirectory(d.Name, path, d.CreationTime, d.LastWriteTime));
@@ -19,6 +26,13 @@ namespace Itof.LocalFileSystem
 
         public IEnumerable<FileSystemNode> ListFiles(string path)
             => new DirectoryInfo(path).EnumerateFiles()
-                .Select(f => FileSystemNode.CreateFile(f.Name, f.Directory.FullName, f.CreationTime, f.LastWriteTime, f.Length));
+                .Select(f => FileSystemNode.CreateFile(
+                    f.Name,
+                    f.Directory.FullName,
+                    f.CreationTime,
+                    f.LastWriteTime,
+                    f.Length,
+                    mime: _mimeMapService.GetMimeFromExtension((f.Extension ?? string.Empty).TrimStart('.'))
+                ));
     }
 }

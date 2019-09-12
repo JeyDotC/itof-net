@@ -2,6 +2,7 @@ using ElectronNET.API;
 using ElectronNET.API.Entities;
 using Itof.Core.Services;
 using Itof.LocalFileSystem;
+using Itof.UI.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +33,8 @@ namespace Itof.UI
                 configuration.RootPath = "ClientApp/build";
             });
 
-            services.AddTransient<IFileSystemService>(p => new LocalFileSystemService());
+            services.AddSingleton<IMimeMapService>(p => new AspNetMimeMapService());
+            services.AddTransient<IFileSystemService>(p => new LocalFileSystemService(p.GetService<IMimeMapService>()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
