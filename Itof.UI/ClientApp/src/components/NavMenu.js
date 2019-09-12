@@ -25,7 +25,7 @@ export class NavMenu extends Component {
     render() {
         return (
             <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3" fixed={"top"} light={true}>
-                <Container>
+                <Container className="border">
                     <DirectoryBar className="navbar-left" currentPath={this.props.currentPath || ''} onNavigate={this.props.onNavigate} />
                 </Container>
             </Navbar>
