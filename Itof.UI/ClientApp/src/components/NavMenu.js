@@ -12,7 +12,9 @@ export class NavMenu extends Component {
 
         this.toggleNavbar = this.toggleNavbar.bind(this);
         this.state = {
-            collapsed: true
+            collapsed: true,
+            editingPath: false,
+            pathBeingEdited: this.props.currentPath
         };
     }
 
@@ -22,11 +24,48 @@ export class NavMenu extends Component {
         });
     }
 
+    handleEditPath = () => {
+        this.setState({
+            editingPath: true,
+            pathBeingEdited: this.props.currentPath
+        });
+    }
+
+    handleFinishEditPath = () => {
+        this.setState({
+            editingPath: false
+        });
+    }
+
+    handleKeyDown = e => {
+        if (e.key == 'Enter') {
+            e.preventDefault();
+            this.props.onNavigate(this.state.pathBeingEdited);
+        }
+        if (e.key == 'Escape') {
+            e.preventDefault();
+            this.handleFinishEditPath();
+        }
+    }
+
+    handlePathInputChanged = e => {
+        this.setState({
+            pathBeingEdited: e.target.value
+        });
+    }
+
     render() {
         return (
             <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3" fixed={"top"} light={true}>
-                <Container className="border">
-                    <DirectoryBar className="navbar-left" currentPath={this.props.currentPath || ''} onNavigate={this.props.onNavigate} />
+                <Container className="border" onClick={this.handleEditPath}>
+                    {!this.state.editingPath && <DirectoryBar className="navbar-left" currentPath={this.props.currentPath || ''} onNavigate={this.props.onNavigate} />}
+                    {this.state.editingPath && <input ref={input => input && input.focus()}
+                        className="form-control"
+                        type="text"
+                        onChange={this.handlePathInputChanged}
+                        onKeyDown={this.handleKeyDown}
+                        onBlur={this.handleFinishEditPath}
+                        value={this.state.pathBeingEdited} />}
                 </Container>
             </Navbar>
         );

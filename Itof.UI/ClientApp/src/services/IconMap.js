@@ -5,7 +5,7 @@ const IconMap = {
         'video': ['far', 'film'],
         // Text
         'plain': ['far', 'file-alt'],
-        'css': ['far', 'css3-alt'],
+        'css': ['fab', 'css3-alt'],
         'csv': ['far', 'file-csv'],
         'html': ['far', 'file-code'],
         'calendar': ['far', 'calendar'],

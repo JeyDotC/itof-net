@@ -8,7 +8,12 @@ import { faHdd } from '@fortawesome/free-solid-svg-icons'
 export default class DirectoryBar extends Component {
     static displayName = DirectoryBar.name;
 
-    renderPart = ({ path, part }) => <Button key={path} color={'default'} onClick={() => this.props.onNavigate(path)}>{part} &rsaquo;</Button>;
+    handlePartClicked = (path, e) => {
+        e.stopPropagation();
+        this.props.onNavigate(path);
+    }
+
+    renderPart = ({ path, part }) => <Button key={path} color={'default'} onClick={e => this.handlePartClicked(path, e)}>{part} &rsaquo;</Button>;
 
     render() {
         const currentPath = this.props.currentPath;
