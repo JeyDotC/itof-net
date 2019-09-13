@@ -54,6 +54,12 @@ export class NavMenu extends Component {
         });
     }
 
+    handleFocus = e => {
+        const value = e.target.value;
+        e.target.value = '';
+        e.target.value = value;
+    }
+
     render() {
         return (
             <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3" fixed={"top"} light={true}>
@@ -65,6 +71,7 @@ export class NavMenu extends Component {
                         onChange={this.handlePathInputChanged}
                         onKeyDown={this.handleKeyDown}
                         onBlur={this.handleFinishEditPath}
+                        onFocus={this.handleFocus}
                         value={this.state.pathBeingEdited} />}
                 </Container>
             </Navbar>

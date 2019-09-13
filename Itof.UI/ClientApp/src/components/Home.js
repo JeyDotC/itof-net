@@ -52,8 +52,11 @@ export class Home extends Component {
             fetch(`api/FileSystem/dirs?path=${path}`),
             fetch(`api/FileSystem/files?path=${path}`)
         ]).then(result => {
+            const validResults = result.filter(response => response.ok);
+            const inValidResults = result.filter(response => !response.ok);
 
-            Promise.all(result.map(response => response.json()))
+            if (validResults.length > 0) {
+                Promise.all(validResults.map(response => response.json()))
                 .then(jsonResults => {
                     const [dirs, files] = jsonResults;
                     this.setState({
@@ -63,7 +66,15 @@ export class Home extends Component {
                         contextMenuOpen: false
                     });
                 });
-        });
+            }
+
+            if (inValidResults.length > 0) {
+                inValidResults[0].json()
+                .then(jsonResults => {
+                    alert(jsonResults.message);
+                });
+            }
+         });
     }
 
     handleContextMenu = (fileSystemEntry, e) => {

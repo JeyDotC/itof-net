@@ -71,6 +71,7 @@
   <ItemGroup>
     <Folder Include="Services\" />
     <Folder Include="ClientApp\src\services\" />
+    <Folder Include="Filters\" />
   </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>

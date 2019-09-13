@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Itof.Core;
 using Itof.Core.Services;
+using Itof.UI.Filters;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Itof.UI.Controllers
 {
     [Route("api/[controller]")]
+    [ExceptionSerializationFilter]
     public class FileSystemController : Controller
     {
         private readonly IFileSystemService _filesystem;
