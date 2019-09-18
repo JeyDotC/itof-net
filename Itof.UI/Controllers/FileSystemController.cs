@@ -13,6 +13,7 @@ namespace Itof.UI.Controllers
 {
     [Route("api/[controller]")]
     [ExceptionSerializationFilter]
+    [AvoidExternalRequests]
     public class FileSystemController : Controller
     {
         private readonly IFileSystemService _filesystem;
