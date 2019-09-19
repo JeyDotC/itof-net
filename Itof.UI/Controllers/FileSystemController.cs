@@ -32,6 +32,9 @@ namespace Itof.UI.Controllers
         [HttpPost("dirs")]
         public void CreateDirectory(string path) => _filesystem.CreateDirectory(path);
 
+        [HttpPut("dirs")]
+        public void MoveDirectory(string path, string newPath) => _filesystem.MoveDirectory(path, newPath);
+
         [HttpGet("files")]
         public IEnumerable<FileSystemNode> Files(string path = "/", string orderByName = "asc") => _filesystem.ListFiles(path).OrderBy(f => f.Name);
 

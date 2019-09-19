@@ -36,5 +36,7 @@ namespace Itof.LocalFileSystem
                     f.Length,
                     mime: _mimeMapService.GetMimeFromExtension((f.Extension ?? string.Empty).TrimStart('.'))
                 ));
+
+        public void MoveDirectory(string path, string newPath) => Directory.Move(path, newPath);
     }
 }
