@@ -118,6 +118,9 @@ export class Home extends Component {
                 <ContextMenu
                     selectedItem={this.state.currentFileSystemEntry}
                     show={this.state.contextMenuOpen}
+                    currentPath={this.state.currentPath}
+                    directoriesAtCurrentPath={this.state.directoriesAtCurrentPath}
+                    onNavigate={this.handleNavigate}
                     x={this.state.contextMenuPosition.x}
                     y={this.state.contextMenuPosition.y} />
             </div>

@@ -10,5 +10,7 @@ namespace Itof.Core.Services
         IEnumerable<FileSystemNode> ListDirectories(string path);
 
         IEnumerable<FileSystemNode> ListFiles(string path);
+
+        void CreateDirectory(string newDirectoryPath);
     }
 }

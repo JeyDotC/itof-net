@@ -24,22 +24,16 @@ namespace Itof.UI.Controllers
         }
 
         [HttpGet("drives")]
-        public IEnumerable<Drive> Drives()
-        {
-            return _filesystem.ListDrives();
-        }
+        public IEnumerable<Drive> Drives() => _filesystem.ListDrives();
 
         [HttpGet("dirs")]
-        public IEnumerable<FileSystemNode> Directories(string path="/", string orderByName="asc")
-        {
-            return _filesystem.ListDirectories(path).OrderBy(f => f.Name);
-        }
+        public IEnumerable<FileSystemNode> Directories(string path = "/", string orderByName = "asc") => _filesystem.ListDirectories(path).OrderBy(f => f.Name);
+
+        [HttpPost("dirs")]
+        public void CreateDirectory(string path) => _filesystem.CreateDirectory(path);
 
         [HttpGet("files")]
-        public IEnumerable<FileSystemNode> Files(string path="/", string orderByName = "asc")
-        {
-            return _filesystem.ListFiles(path).OrderBy(f => f.Name);
-        }
-    
+        public IEnumerable<FileSystemNode> Files(string path = "/", string orderByName = "asc") => _filesystem.ListFiles(path).OrderBy(f => f.Name);
+
     }
 }
