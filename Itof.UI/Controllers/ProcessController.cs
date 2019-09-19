@@ -4,10 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Collections;
 using System.IO;
+using Itof.UI.Filters;
 
 namespace Itof.UI.Controllers
 {
     [Route("api/[controller]")]
+    [ExceptionSerializationFilter]
+    [AvoidExternalRequests]
     public class ProcessController : Controller
     {
         // Mac OS: open -a Terminal $dir
