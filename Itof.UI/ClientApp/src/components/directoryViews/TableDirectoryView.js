@@ -23,18 +23,21 @@ export default class TableDirectoryView extends React.Component {
         if (this.state.currentItemKey !== newItemKey) {
             this.setState({ currentItemKey: newItemKey });
             this.props.onItemSelected({ item: pickedElement });
-        } else
+        } else{
             // Second click on an element.
-            if ((currentTime - this.state.lastClick) <= 500) {
+            const interval = currentTime - this.state.lastClick;
+            if (interval <= 500) {
                 this.props.onItemOpen(pickedElement);
+            } else if (interval > 500 && interval < 1000) {
+                this.props.onItemSelected({ item: pickedElement, edit: true });
             }
-
+        }
         this.setState({ lastClick: currentTime });
     }
 
     isHidden = name => name.startsWith('.');
 
-    renderFileSystemEntry({ entry, color = undefined }) {
+    renderFileSystemEntry = ({ entry, color = undefined }) => {
         const isFolder = entry.kind === 0;
         const isFile = entry.kind === 1;
         const isCurrentlyPickedEntry = entry.fullName === (this.props.currentFileSystemEntry || { fullName: undefined }).fullName;
@@ -54,7 +57,7 @@ export default class TableDirectoryView extends React.Component {
                 <FileSystemEntryIcon entry={entry} color={color} />
             </td>
             <th scope="row">
-                {isEditingFileSystemEntry && <EntryNameEditor value={entry.name} />}
+                {isEditingFileSystemEntry && <EntryNameEditor value={entry.name} onFinishEdit={this.props.onFinishEdit} onSetEntryName={this.props.onSetEntryName} />}
                 {!isEditingFileSystemEntry && entry.name}
             </th>
         </tr>);

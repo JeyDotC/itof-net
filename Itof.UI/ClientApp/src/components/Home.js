@@ -49,7 +49,11 @@ export class Home extends Component {
         if (typeof item === 'string') {
             currentItem = this.state.directoriesAtCurrentPath.find(d => d.name === item) || this.state.filesAtCurrentPath.find(f => f.name === item);
         }
-        this.setState({ currentFileSystemEntry: currentItem, isEditingFileSystemEntry: edit });
+        this.setState({
+            contextMenuOpen: false,
+            currentFileSystemEntry: currentItem,
+            isEditingFileSystemEntry: edit
+        });
     }
 
     handleNavigate = path => new Promise((resolve, reject) => {
@@ -97,6 +101,21 @@ export class Home extends Component {
         }
     }
 
+    handleFinishEdit = () => this.setState({ isEditingFileSystemEntry: false });
+
+    handleSetEntryName = entryName => fetch(`/api/FileSystem/dirs?path=${this.state.currentFileSystemEntry.fullName}&newPath=${this.state.currentFileSystemEntry.directory}/${entryName}`, {
+            method: 'PUT'
+        }).then(response => {
+            if (response.ok) {
+                this.handleNavigate(this.state.currentFileSystemEntry.directory);
+            } else {
+                response.json()
+                .then(jsonResults => {
+                    alert(jsonResults.message);
+                });
+            }
+        });
+
     render() {
         return (
             <div style={{ paddingTop: '70px', minHeight: '600px' }}
@@ -116,8 +135,10 @@ export class Home extends Component {
                                 directories={this.state.directoriesAtCurrentPath}
                                 files={this.state.filesAtCurrentPath}
                                 onItemSelected={this.handleItemSelected}
+                                onSetEntryName={this.handleSetEntryName}
                                 onItemOpen={this.handleItemOpen}
                                 onContextMenu={this.handleContextMenu}
+                                onFinishEdit={this.handleFinishEdit}
                             />
                             <div id="bottom-gutter" style={{ height: '300px' }} />
                         </Col>

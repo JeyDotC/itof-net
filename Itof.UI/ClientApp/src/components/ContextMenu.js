@@ -33,6 +33,11 @@ export default class ContextMenu extends React.Component {
         });
     }
 
+    handleRename = e => {
+        e.stopPropagation();
+        this.props.onItemSelected({ item: this.props.currentPath, edit: true });
+    }
+
     render() {
         return (<div className="dropdown-menu" style={{
             display: this.props.show ? 'block' : 'none',
@@ -40,6 +45,8 @@ export default class ContextMenu extends React.Component {
             left: this.props.x,
             top: this.props.y
         }}>
+            {/*<button className="dropdown-item" type="button" onClick={this.handleRename}>Rename</button>
+            <div className="dropdown-divider"></div>*/}
             <button className="dropdown-item" type="button" onClick={this.handleOpenTerminal}>Open Terminal Here</button>
             <button className="dropdown-item" type="button" onClick={this.handleCopyAsPath}>Copy Path</button>
             <div className="dropdown-divider"></div>
