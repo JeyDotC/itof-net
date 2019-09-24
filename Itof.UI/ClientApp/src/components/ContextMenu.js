@@ -1,5 +1,4 @@
 ﻿import React from 'react';
-import { DropdownMenu, DropdownItem } from 'reactstrap';
 
 export default class ContextMenu extends React.Component {
 
@@ -21,12 +20,13 @@ export default class ContextMenu extends React.Component {
         const lastNumber = proposedName !== undefined ? proposedName.split(' ').pop() : undefined;
         const newNumber = lastNumber === undefined ? '' : (isNaN(lastNumber) ? 1 : parseInt(lastNumber) + 1);
         const newFolderName = proposedName === undefined ? defaultFolderName : `${defaultFolderName} ${newNumber}`;
+        const newFullFolderName = `${fullName}/${newFolderName}`;
 
-        fetch(`/api/FileSystem/dirs?path=${fullName}/${newFolderName}`, {
+        fetch(`/api/FileSystem/dirs?path=${newFullFolderName}`, {
             method: 'POST'
         }).then(response => {
             if (response.ok) {
-                this.props.onNavigate(fullName);
+                this.props.onNavigate(fullName).then(() => this.props.onItemSelected({ item: newFolderName, edit: true }));
             } else {
                 response.json().then(data => alert(data.message));
             }

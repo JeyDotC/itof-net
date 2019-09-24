@@ -18,7 +18,8 @@ export class Home extends Component {
             filesAtCurrentPath: [],
             contextMenuOpen: false,
             contextMenuPosition: { x: 0, y: 0 },
-            currentFileSystemEntry: undefined
+            currentFileSystemEntry: undefined,
+            isEditingFileSystemEntry: false
         };
     }
 
@@ -43,11 +44,15 @@ export class Home extends Component {
             method: 'POST'
         });
 
-    handleItemSelected = item => {
-        this.setState({ currentFileSystemEntry: item });
+    handleItemSelected = ({ item, edit = false }) => {
+        let currentItem = item;
+        if (typeof item === 'string') {
+            currentItem = this.state.directoriesAtCurrentPath.find(d => d.name === item) || this.state.filesAtCurrentPath.find(f => f.name === item);
+        }
+        this.setState({ currentFileSystemEntry: currentItem, isEditingFileSystemEntry: edit });
     }
 
-    handleNavigate = path => {
+    handleNavigate = path => new Promise((resolve, reject) => {
         Promise.all([
             fetch(`api/FileSystem/dirs?path=${path}`),
             fetch(`api/FileSystem/files?path=${path}`)
@@ -65,6 +70,7 @@ export class Home extends Component {
                         filesAtCurrentPath: files,
                         contextMenuOpen: false
                     });
+                    resolve(path);
                 });
             }
 
@@ -73,9 +79,10 @@ export class Home extends Component {
                 .then(jsonResults => {
                     alert(jsonResults.message);
                 });
+                reject(path);
             }
          });
-    }
+    });
 
     handleContextMenu = (fileSystemEntry, e) => {
         e.preventDefault();
@@ -105,6 +112,7 @@ export class Home extends Component {
                             <TableDirectoryView
                                 currentPath={this.state.currentPath}
                                 currentFileSystemEntry={this.state.currentFileSystemEntry}
+                                isEditingFileSystemEntry={this.state.isEditingFileSystemEntry}
                                 directories={this.state.directoriesAtCurrentPath}
                                 files={this.state.filesAtCurrentPath}
                                 onItemSelected={this.handleItemSelected}
@@ -121,6 +129,7 @@ export class Home extends Component {
                     currentPath={this.state.currentPath}
                     directoriesAtCurrentPath={this.state.directoriesAtCurrentPath}
                     onNavigate={this.handleNavigate}
+                    onItemSelected={this.handleItemSelected}
                     x={this.state.contextMenuPosition.x}
                     y={this.state.contextMenuPosition.y} />
             </div>

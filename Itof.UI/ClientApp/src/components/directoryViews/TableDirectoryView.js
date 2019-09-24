@@ -3,6 +3,7 @@ import { Table } from 'reactstrap';
 import './TableDirectoryView.css';
 import classNames from 'classnames';
 import FileSystemEntryIcon from '../FileSystemEntryIcon';
+import EntryNameEditor from '../EntryNameEditor';
 
 export default class TableDirectoryView extends React.Component {
 
@@ -21,7 +22,7 @@ export default class TableDirectoryView extends React.Component {
         // First click on an element.
         if (this.state.currentItemKey !== newItemKey) {
             this.setState({ currentItemKey: newItemKey });
-            this.props.onItemSelected(pickedElement);
+            this.props.onItemSelected({ item: pickedElement });
         } else
             // Second click on an element.
             if ((currentTime - this.state.lastClick) <= 500) {
@@ -37,6 +38,7 @@ export default class TableDirectoryView extends React.Component {
         const isFolder = entry.kind === 0;
         const isFile = entry.kind === 1;
         const isCurrentlyPickedEntry = entry.fullName === (this.props.currentFileSystemEntry || { fullName: undefined }).fullName;
+        const isEditingFileSystemEntry = isCurrentlyPickedEntry && this.props.isEditingFileSystemEntry;
 
         const classes = {
             'text-muted': this.isHidden(entry.name),
@@ -51,7 +53,10 @@ export default class TableDirectoryView extends React.Component {
             <td>
                 <FileSystemEntryIcon entry={entry} color={color} />
             </td>
-            <th scope="row">{entry.name}</th>
+            <th scope="row">
+                {isEditingFileSystemEntry && <EntryNameEditor value={entry.name} />}
+                {!isEditingFileSystemEntry && entry.name}
+            </th>
         </tr>);
     }
 

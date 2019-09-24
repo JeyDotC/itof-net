@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
+import { Container, Navbar } from 'reactstrap';
 import DirectoryBar from './DirectoryBar';
 import './NavMenu.css';
 
@@ -38,11 +37,11 @@ export class NavMenu extends Component {
     }
 
     handleKeyDown = e => {
-        if (e.key == 'Enter') {
+        if (e.key === 'Enter') {
             e.preventDefault();
             this.props.onNavigate(this.state.pathBeingEdited);
         }
-        if (e.key == 'Escape') {
+        if (e.key === 'Escape') {
             e.preventDefault();
             this.handleFinishEditPath();
         }

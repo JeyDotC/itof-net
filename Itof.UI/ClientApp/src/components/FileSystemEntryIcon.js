@@ -15,7 +15,6 @@ export default class FileSystemEntryIcon extends React.Component {
     render() {
         const entry = this.props.entry;
         const isFolder = entry.kind === 0;
-        const isFile = entry.kind === 1;
         const icon = isFolder ? 'folder' : IconMap.getByMime(entry.mime);
 
         return (
