@@ -18,6 +18,8 @@ namespace Itof.LocalFileSystem
 
         public void CreateDirectory(string newDirectoryPath) => new DirectoryInfo(newDirectoryPath).Create();
 
+        public void CreateFile(string newFilePath) => new FileInfo(newFilePath).Create();
+
         public IEnumerable<FileSystemNode> ListDirectories(string path)
             => new DirectoryInfo(path).EnumerateDirectories()
                 .Select(d => FileSystemNode.CreateDirectory(d.Name, path, d.CreationTime, d.LastWriteTime));
@@ -38,5 +40,7 @@ namespace Itof.LocalFileSystem
                 ));
 
         public void MoveDirectory(string path, string newPath) => Directory.Move(path, newPath);
+
+        public void RemoveFile(string path) => File.Delete(path);
     }
 }

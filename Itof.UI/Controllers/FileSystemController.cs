@@ -39,5 +39,11 @@ namespace Itof.UI.Controllers
         [HttpGet("files")]
         public IEnumerable<FileSystemNode> Files(string path = "/", string orderByName = "asc") => _filesystem.ListFiles(path).OrderBy(f => f.Name, new NaturalSortComparer());
 
+        [HttpPost("files")]
+        public void CreateFile(string path) => _filesystem.CreateFile(path);
+
+        [HttpDelete("files")]
+        public void RemoveFile(string path) => _filesystem.RemoveFile(path);
+
     }
 }

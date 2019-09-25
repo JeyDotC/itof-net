@@ -31,8 +31,15 @@ export class Home extends Component {
     }
 
     handleGlobalKeyBoard = event => {
-        if (event.key === 'F2' && this.state.currentFileSystemEntry !== undefined) {
-            this.setState({isEditingFileSystemEntry: true});
+        if (this.state.currentFileSystemEntry !== undefined) {
+            switch (event.key) {
+                case 'F2':
+                    this.setState({isEditingFileSystemEntry: true});
+                    break;
+                case 'Delete':
+                    this.handleDeleteEntry(this.state.currentFileSystemEntry);
+                    break;
+            }
         }
     }
 
@@ -123,6 +130,31 @@ export class Home extends Component {
             }
         });
 
+    handleDeleteEntry = fileSystemEntry => {
+        if (fileSystemEntry.kind === 0) {
+            alert('Folder deletion is not yet supported.');
+            return;
+        }
+
+        if (!window.confirm(`Are you sure to delete file ${fileSystemEntry.name}? Deletion is PERMANENT`)) {
+            return;
+        }
+
+        fetch(`/api/FileSystem/files?path=${fileSystemEntry.fullName}`, {
+            method: 'DELETE'
+        }).then(response => {
+            if (response.ok) {
+                this.handleNavigate(this.state.currentPath);
+            } else {
+                response.json()
+                .then(jsonResults => {
+                    alert(jsonResults.message);
+                });
+            }
+        });
+
+    }
+
     render() {
         return (
             <div style={{ paddingTop: '70px', minHeight: '600px' }}
@@ -156,7 +188,9 @@ export class Home extends Component {
                     show={this.state.contextMenuOpen}
                     currentPath={this.state.currentPath}
                     directoriesAtCurrentPath={this.state.directoriesAtCurrentPath}
+                    filesAtCurrentPath={this.state.filesAtCurrentPath}
                     onNavigate={this.handleNavigate}
+                    onDeleteEntry={this.handleDeleteEntry}
                     onItemSelected={this.handleItemSelected}
                     x={this.state.contextMenuPosition.x}
                     y={this.state.contextMenuPosition.y} />
