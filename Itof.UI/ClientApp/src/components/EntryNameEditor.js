@@ -11,12 +11,6 @@ export default class EntryNameEditor extends React.Component {
         };
     }
 
-    handleRef = input => {
-        if (input) {
-            input.focus();
-        }
-    }
-
     handleFocus = e => {
         e.target.select();
     }
@@ -34,15 +28,16 @@ export default class EntryNameEditor extends React.Component {
         }
         if (e.key === 'Escape') {
             e.preventDefault();
-            this.props.onFinishEdit();
+            e.target.blur();
         }
     }
 
     render() {
-        return (<Input
+        return (<input
+            className="form-control"
             type="text"
             value={this.state.entryName}
-            ref={this.handleRef}
+            ref={input => input && input.focus()}
             onFocus={this.handleFocus}
             onBlur={this.props.onFinishEdit}
             onChange={this.handleChange}

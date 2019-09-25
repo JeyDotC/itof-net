@@ -27,6 +27,13 @@ export class Home extends Component {
         fetch('api/FileSystem/drives')
             .then(response => response.json())
             .then(data => this.setState({ drives: data }));
+        document.addEventListener('keydown', this.handleGlobalKeyBoard);
+    }
+
+    handleGlobalKeyBoard = event => {
+        if (event.key === 'F2' && this.state.currentFileSystemEntry !== undefined) {
+            this.setState({isEditingFileSystemEntry: true});
+        }
     }
 
     handleItemOpen = item => {
