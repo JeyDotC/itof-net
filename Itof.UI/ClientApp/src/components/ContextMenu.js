@@ -71,7 +71,7 @@ export default class ContextMenu extends React.Component {
             top: this.props.y
         }}>
             <button className="dropdown-item" type="button" onClick={this.handleRename}>Rename</button>
-            <button className={classNames("dropdown-item", { "text-danger": isFile, 'text-muted': isDir })} type="button" onClick={() => this.props.onDeleteEntry(this.props.selectedItem)}>Delete</button>
+            <button className={classNames("dropdown-item", "text-danger")} type="button" onClick={() => this.props.onDeleteEntry(this.props.selectedItem)}>Delete</button>
             <div className="dropdown-divider"></div>
             <button className="dropdown-item" type="button" onClick={this.handleOpenTerminal}>Open Terminal Here</button>
             <button className="dropdown-item" type="button" onClick={this.handleCopyAsPath}>Copy Path</button>

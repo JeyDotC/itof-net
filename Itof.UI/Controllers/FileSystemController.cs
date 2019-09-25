@@ -36,6 +36,9 @@ namespace Itof.UI.Controllers
         [HttpPut("dirs")]
         public void MoveDirectory(string path, string newPath) => _filesystem.MoveDirectory(path, newPath);
 
+        [HttpDelete("dirs")]
+        public void RemoveDirectory(string path) => _filesystem.RemoveDirectory(path);
+
         [HttpGet("files")]
         public IEnumerable<FileSystemNode> Files(string path = "/", string orderByName = "asc") => _filesystem.ListFiles(path).OrderBy(f => f.Name, new NaturalSortComparer());
 

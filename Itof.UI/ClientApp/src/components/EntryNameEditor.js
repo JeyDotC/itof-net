@@ -24,7 +24,11 @@ export default class EntryNameEditor extends React.Component {
     handleKeyDown = e => {
         if (e.key === 'Enter') {
             e.preventDefault();
-            this.props.onSetEntryName(this.state.entryName);
+            if(this.state.entryName !== this.props.value){
+                this.props.onSetEntryName(this.state.entryName);
+            } else {
+                e.target.blur();
+            }
         }
         if (e.key === 'Escape') {
             e.preventDefault();

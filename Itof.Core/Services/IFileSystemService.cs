@@ -13,6 +13,8 @@ namespace Itof.Core.Services
 
         void CreateDirectory(string newDirectoryPath);
 
+        void RemoveDirectory(string path);
+
         void CreateFile(string newFilePath);
 
         void RemoveFile(string path);

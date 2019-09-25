@@ -130,30 +130,32 @@ export class Home extends Component {
             }
         });
 
-    handleDeleteEntry = fileSystemEntry => {
-        if (fileSystemEntry.kind === 0) {
-            alert('Folder deletion is not yet supported.');
-            return;
+    handleDeleteEntry = fileSystemEntry => new Promise((resolve, reject) => {
+
+        const kindName = fileSystemEntry.kind === 0 ? 'directory' : 'file';
+
+        if (!window.confirm(`Are you sure to delete ${kindName} ${fileSystemEntry.name}?\nDeletion is PERMANENT!`)) {
+            return reject();
         }
 
-        if (!window.confirm(`Are you sure to delete file ${fileSystemEntry.name}? Deletion is PERMANENT`)) {
-            return;
-        }
+        const apiPart = fileSystemEntry.kind === 0 ? 'dirs' : 'files';
 
-        fetch(`/api/FileSystem/files?path=${fileSystemEntry.fullName}`, {
+        fetch(`/api/FileSystem/${apiPart}?path=${fileSystemEntry.fullName}`, {
             method: 'DELETE'
         }).then(response => {
             if (response.ok) {
                 this.handleNavigate(this.state.currentPath);
+                resolve();
             } else {
                 response.json()
                 .then(jsonResults => {
                     alert(jsonResults.message);
+                    reject();
                 });
             }
         });
 
-    }
+    });
 
     render() {
         return (
