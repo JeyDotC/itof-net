@@ -8,10 +8,10 @@ namespace Itof.UI.Filters
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            if (!context.HttpContext.Connection.LocalIpAddress.Equals(context.HttpContext.Connection.RemoteIpAddress))
+            /*if (!context.HttpContext.Connection.LocalIpAddress.Equals(context.HttpContext.Connection.RemoteIpAddress))
             {
                 context.Result = new StatusCodeResult(403);
-            }
+            }*/
         }
     }
 }
