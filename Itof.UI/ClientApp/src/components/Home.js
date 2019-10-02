@@ -3,7 +3,8 @@ import { Container, Row, Col } from 'reactstrap';
 import { NavMenu } from './NavMenu';
 import DirectoryTree from './DirectoryTree';
 import TableDirectoryView from './directoryViews/TableDirectoryView';
-import ContextMenu from './ContextMenu'
+import ContextMenu from './ContextMenu';
+import * as signalR from '@aspnet/signalr';
 
 export class Home extends Component {
     static displayName = Home.name;
@@ -28,6 +29,17 @@ export class Home extends Component {
             .then(response => response.json())
             .then(data => this.setState({ drives: data }));
         document.addEventListener('keydown', this.handleGlobalKeyBoard);
+        this.connection = new signalR.HubConnectionBuilder().withUrl("/fileSystemHub").build();
+
+        this.connection.on('DirectoryChanged', path => console.log('DirectoryChanged', path));
+
+        this.connection.start()
+            .then(() => console.log('Connected'))
+            .catch(err => console.log('Connection failed', err));
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('keydown', this.handleGlobalKeyBoard);
     }
 
     handleGlobalKeyBoard = event => {
@@ -39,6 +51,7 @@ export class Home extends Component {
                 case 'Delete':
                     this.handleDeleteEntry(this.state.currentFileSystemEntry);
                     break;
+                default: break;
             }
         }
     }
@@ -89,6 +102,7 @@ export class Home extends Component {
                         contextMenuOpen: false
                     });
                     resolve(path);
+                    this.connection && this.connection.invoke('ListenTo', path).catch(err => console.error(err.toString()));
                 });
             }
 

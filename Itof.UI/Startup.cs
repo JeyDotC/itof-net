@@ -2,6 +2,7 @@ using ElectronNET.API;
 using ElectronNET.API.Entities;
 using Itof.Core.Services;
 using Itof.LocalFileSystem;
+using Itof.UI.Hubs;
 using Itof.UI.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -32,7 +33,7 @@ namespace Itof.UI
             {
                 configuration.RootPath = "ClientApp/build";
             });
-
+            services.AddSignalR();
             services.AddSingleton<IMimeMapService>(p => new AspNetMimeMapService());
             services.AddTransient<IFileSystemService>(p => new LocalFileSystemService(p.GetService<IMimeMapService>()));
         }
@@ -57,6 +58,11 @@ namespace Itof.UI
                 routes.MapRoute(
                     name: "default",
                     template: "{controller}/{action=Index}/{id?}");
+            });
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<FileSystemHub>("/fileSystemHub");
             });
 
             app.UseSpa(spa =>
