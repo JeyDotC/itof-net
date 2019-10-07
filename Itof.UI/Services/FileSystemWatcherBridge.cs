@@ -35,8 +35,9 @@ namespace Itof.UI.Services
 
             _fileSystemWatcher = new FileSystemWatcher {
                 Path = path,
-                NotifyFilter = NotifyFilters.FileName | NotifyFilters.DirectoryName,
                 IncludeSubdirectories = false,
+                EnableRaisingEvents = true,
+                
             };
 
             _fileSystemWatcher.Changed += OnChanged;
