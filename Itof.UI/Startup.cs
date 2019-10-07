@@ -36,6 +36,7 @@ namespace Itof.UI
             services.AddSignalR();
             services.AddSingleton<IMimeMapService>(p => new AspNetMimeMapService());
             services.AddTransient<IFileSystemService>(p => new LocalFileSystemService(p.GetService<IMimeMapService>()));
+            services.AddSingleton<FileSystemWatcherBridge>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
