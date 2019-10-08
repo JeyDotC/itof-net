@@ -1,5 +1,6 @@
 using ElectronNET.API;
 using ElectronNET.API.Entities;
+using Itof.Core;
 using Itof.Core.Services;
 using Itof.LocalFileSystem;
 using Itof.UI.Hubs;
@@ -37,6 +38,7 @@ namespace Itof.UI
             services.AddSingleton<IMimeMapService>(p => new AspNetMimeMapService());
             services.AddTransient<IFileSystemService>(p => new LocalFileSystemService(p.GetService<IMimeMapService>()));
             services.AddSingleton<FileSystemWatcherBridge>();
+            services.AddSingleton(HostPlatform.FromCurrentPlatform());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

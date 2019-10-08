@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
+using Itof.Core;
 using Itof.UI.Hubs;
 using Microsoft.AspNetCore.SignalR;
 
@@ -8,12 +10,13 @@ namespace Itof.UI.Services
     public class FileSystemWatcherBridge : IDisposable
     {
         private readonly IHubContext<FileSystemHub> _hubContext;
-
+        private readonly HostPlatform _hostPlatform;
         private FileSystemWatcher _fileSystemWatcher;
 
-        public FileSystemWatcherBridge(IHubContext<FileSystemHub> hubContext)
+        public FileSystemWatcherBridge(IHubContext<FileSystemHub> hubContext, HostPlatform hostPlatform)
         {
             _hubContext = hubContext;
+            _hostPlatform = hostPlatform;
         }
 
         public void Watch(string path)
@@ -23,7 +26,7 @@ namespace Itof.UI.Services
                 return;
             }
 
-            if (path.StartsWith("//"))
+            if (path.StartsWith("//", StringComparison.InvariantCulture))
             {
                 path = $@"/{path.TrimStart('/')}";
             }
@@ -48,11 +51,19 @@ namespace Itof.UI.Services
 
         private void OnRenamed(object sender, RenamedEventArgs e)
         {
-            _hubContext.Clients.All.SendAsync(FileSystemHub.DirectoryChangedOperation, e.FullPath);
+            if (_hostPlatform.WatchIgnore.Contains(e.Name))
+            {
+                return;
+            }
+            _hubContext.Clients.All.SendAsync(FileSystemHub.DirectoryChangedOperation, e.OldFullPath);
         }
 
         private void OnChanged(object sender, FileSystemEventArgs e)
         {
+            if (_hostPlatform.WatchIgnore.Contains(e.Name))
+            {
+                return;
+            }
             _hubContext.Clients.All.SendAsync(FileSystemHub.DirectoryChangedOperation, e.FullPath);
         }
 

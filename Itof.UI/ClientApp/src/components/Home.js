@@ -31,7 +31,7 @@ export class Home extends Component {
         document.addEventListener('keydown', this.handleGlobalKeyBoard);
         this.connection = new signalR.HubConnectionBuilder().withUrl("/fileSystemHub").build();
 
-        this.connection.on('DirectoryChanged', path => console.log('DirectoryChanged', path));
+        this.connection.on('DirectoryChanged', this.handleDirectoryChanged);
 
         this.connection.start()
             .then(() => console.log('Connected'))
@@ -40,6 +40,15 @@ export class Home extends Component {
 
     componentWillUnmount() {
         document.removeEventListener('keydown', this.handleGlobalKeyBoard);
+    }
+
+    handleDirectoryChanged = path => {
+        console.log("Navigation through trigger.", path);
+        if (this.state.isEditingFileSystemEntry) {
+            return;
+        }
+
+        this.handleNavigate(this.state.currentPath);
     }
 
     handleGlobalKeyBoard = event => {
