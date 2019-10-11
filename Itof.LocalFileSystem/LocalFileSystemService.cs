@@ -44,5 +44,7 @@ namespace Itof.LocalFileSystem
         public void RemoveFile(string path) => File.Delete(path);
 
         public void RemoveDirectory(string path) => Directory.Delete(path, recursive: true);
+
+        public void CopyFile(string sourceFile, string destinationFile) => File.Copy(sourceFile, destinationFile);
     }
 }

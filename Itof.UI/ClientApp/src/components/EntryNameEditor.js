@@ -1,6 +1,4 @@
 ﻿import React from 'react';
-import { Input } from 'reactstrap';
-import classNames from 'classnames';
 
 export default class EntryNameEditor extends React.Component {
 

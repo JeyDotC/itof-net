@@ -48,5 +48,8 @@ namespace Itof.UI.Controllers
         [HttpDelete("files")]
         public void RemoveFile(string path) => _filesystem.RemoveFile(path);
 
+        [HttpPost("files/copy")]
+        public void CopyFile(string source, string destination) => _filesystem.CopyFile(source, destination);
+
     }
 }

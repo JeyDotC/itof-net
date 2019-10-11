@@ -20,5 +20,7 @@ namespace Itof.Core.Services
         void RemoveFile(string path);
 
         void MoveDirectory(string path, string newPath);
+
+        void CopyFile(string sourceFile, string destinationFile);
     }
 }
