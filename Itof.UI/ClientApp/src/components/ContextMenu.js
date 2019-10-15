@@ -1,5 +1,6 @@
 ﻿import React from 'react';
 import classNames from 'classnames';
+import { proposeFolderName, proposeFileName } from "../services/NameProposer"
 
 export default class ContextMenu extends React.Component {
 
@@ -15,21 +16,18 @@ export default class ContextMenu extends React.Component {
     }
 
     handleCreateDirectory = async () => {
-        const defaultFolderName = 'Untitled Folder';
-        const fullName = this.props.currentPath;
-        const proposedName = [...this.props.directoriesAtCurrentPath.filter(p => p.name.startsWith(defaultFolderName))].map(d => d.name).pop();
-        const lastNumber = proposedName !== undefined ? proposedName.split(' ').pop() : undefined;
-        const newNumber = lastNumber === undefined ? '' : (isNaN(lastNumber) ? 1 : parseInt(lastNumber, 10) + 1);
-        const newFolderName = proposedName === undefined ? defaultFolderName : `${defaultFolderName} ${newNumber}`;
-        const newFullFolderName = `${fullName}/${newFolderName}`;
+        console.log('handleCreateDirectory');
+        const currentPath = this.props.currentPath;
+        const directoriesAtCurrentPath = this.props.directoriesAtCurrentPath;
+        const newFullFolderName = proposeFolderName({ currentPath, directoriesAtCurrentPath });
 
-        const response = await fetch(`/api/FileSystem/dirs?path=${newFullFolderName}`, {
+        const response = await fetch(`/api/FileSystem/dirs?path=${newFullFolderName.fullName}`, {
             method: 'POST'
         });
 
         if (response.ok) {
-            await this.props.onNavigate(fullName)
-            this.props.onItemSelected({ item: newFolderName, edit: true });
+            await this.props.onNavigate(currentPath)
+            this.props.onItemSelected({ item: newFullFolderName.name, edit: true });
         } else {
             const data = await response.json();
             alert(data.message);
@@ -37,21 +35,17 @@ export default class ContextMenu extends React.Component {
     }
 
     handleCreateFile = async () => {
-        const defaultFileName = 'Untitled';
-        const fullName = this.props.currentPath;
-        const proposedName = [...this.props.filesAtCurrentPath.filter(p => p.name.startsWith(defaultFileName))].map(d => d.name).pop();
-        const lastNumber = proposedName !== undefined ? proposedName.split(' ').pop() : undefined;
-        const newNumber = lastNumber === undefined ? '' : (isNaN(lastNumber) ? 1 : parseInt(lastNumber, 10) + 1);
-        const newFileName = proposedName === undefined ? `${defaultFileName}.txt` : `${defaultFileName} ${newNumber}.txt`;
-        const newFullFileName = `${fullName}/${newFileName}`;
+        const currentPath = this.props.currentPath;
+        const filesAtCurrentPath = this.props.filesAtCurrentPath;
+        const newFullFileName = proposeFileName({ currentPath, filesAtCurrentPath });
 
-        const response = await fetch(`/api/FileSystem/files?path=${newFullFileName}`, {
+        const response = await fetch(`/api/FileSystem/files?path=${newFullFileName.fullName}`, {
             method: 'POST'
         })
 
         if (response.ok) {
-            await this.props.onNavigate(fullName);
-            this.props.onItemSelected({ item: newFileName, edit: true });
+            await this.props.onNavigate(currentPath);
+            this.props.onItemSelected({ item: newFullFileName.name, edit: true });
         } else {
             const data = await response.json();
             alert(data.message);
