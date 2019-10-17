@@ -34,7 +34,7 @@ namespace Itof.UI.Controllers
         public void CreateDirectory(string path) => _filesystem.CreateDirectory(path);
 
         [HttpPut("dirs")]
-        public void MoveDirectory(string path, string newPath) => _filesystem.MoveDirectory(path, newPath);
+        public void MoveDirectory(string path, string newPath) => _filesystem.MoveFileSystemEntry(path, newPath);
 
         [HttpDelete("dirs")]
         public void RemoveDirectory(string path) => _filesystem.RemoveDirectory(path);

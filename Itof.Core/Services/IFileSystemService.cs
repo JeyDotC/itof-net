@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Itof.Core.Services
 {
@@ -19,7 +20,7 @@ namespace Itof.Core.Services
 
         void RemoveFile(string path);
 
-        void MoveDirectory(string path, string newPath);
+        void MoveFileSystemEntry(string path, string newPath);
 
         void CopyFile(string sourceFile, string destinationFile);
     }

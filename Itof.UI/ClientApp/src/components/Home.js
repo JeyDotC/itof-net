@@ -65,7 +65,7 @@ export class Home extends Component {
                     this.setState({ isEditingFileSystemEntry: true });
                     break;
                 case 'Delete':
-                    this.handleDeleteEntry(this.state.currentFileSystemEntry);
+                    !this.state.isEditingFileSystemEntry && this.handleDeleteEntry(this.state.currentFileSystemEntry);
                     break;
                 case 'c':
                     event.ctrlKey && this.state.currentFileSystemEntry.kind === 1 && this.handleSelectedForCopy({ item: this.state.currentFileSystemEntry });
