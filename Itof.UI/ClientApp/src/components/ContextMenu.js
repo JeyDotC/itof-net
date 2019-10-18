@@ -67,7 +67,6 @@ export default class ContextMenu extends React.Component {
     }
 
     render() {
-        const isDir = this.props.selectedItem && this.props.selectedItem.kind === 0;
         const selectedBlank = !this.props.selectedItem || this.props.selectedItem.name === undefined;
         const canPaste = selectedBlank && this.props.selectedForCopy !== undefined;
 
@@ -78,7 +77,7 @@ export default class ContextMenu extends React.Component {
             top: this.props.y
         }}>
             {canPaste && <button className="dropdown-item" type="button" onClick={this.handlePaste}>Paste</button>}
-            {!(selectedBlank || isDir) && <button className="dropdown-item" type="button" onClick={this.handleSelectForCopy}>Copy</button>}
+            {!selectedBlank && <button className="dropdown-item" type="button" onClick={this.handleSelectForCopy}>Copy</button>}
             {!selectedBlank && <button className="dropdown-item" type="button" onClick={this.handleRename}>Rename</button>}
             {!selectedBlank && <button className={classNames("dropdown-item", "text-danger")} type="button" onClick={() => this.props.onDeleteEntry(this.props.selectedItem)}>Delete</button>}
             {(!selectedBlank || canPaste) && <div className="dropdown-divider"></div>}

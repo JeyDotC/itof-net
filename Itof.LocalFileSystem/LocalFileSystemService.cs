@@ -48,7 +48,7 @@ namespace Itof.LocalFileSystem
 
         public void CopyFile(string sourceFile, string destinationFile) => File.Copy(sourceFile, destinationFile);
 
-        public void CopyDirectory(string sourceDirectory, string targetDirectory, Action<Progress> progress)
+        public async Task CopyDirectory(string sourceDirectory, string targetDirectory, Action<Progress> progress)
         {
             var sourceDirInfo = new DirectoryInfo(sourceDirectory);
 
@@ -68,11 +68,13 @@ namespace Itof.LocalFileSystem
 
             foreach (var file in allFiles)
             {
-                var relativeFilePath = file.FullName.Substring(sourceDirectory.Length + 1);
+                var relativeFilePath = file.FullName.Substring(sourceDirectory.Length);
                 progress(new Progress($"Copying {relativeFilePath}...", copiedFileBytes, totalFileBytes));
-                file.CopyTo(Path.Combine(targetDirectory, relativeFilePath));
+                await Task.Run(() => file.CopyTo(Path.Combine(targetDirectory, relativeFilePath)));
                 copiedFileBytes += file.Length;
             }
+
+            progress(new Progress($"Completed.", copiedFileBytes, totalFileBytes));
         }
     }
 }

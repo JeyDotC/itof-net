@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Row, Col } from 'reactstrap';
+import { Container, Row, Col, Modal, ModalHeader, ModalBody, Progress } from 'reactstrap';
 import { NavMenu } from './NavMenu';
 import DirectoryTree from './DirectoryTree';
 import TableDirectoryView from './directoryViews/TableDirectoryView';
@@ -21,9 +21,34 @@ export class Home extends Component {
             contextMenuPosition: { x: 0, y: 0 },
             currentFileSystemEntry: undefined,
             selectedForCopy: undefined,
-            isEditingFileSystemEntry: false
+            isEditingFileSystemEntry: false,
+            longRunningTaskName: "",
+            longRunningTaskIsRunning: false,
+            longRunningTaskProgress: { task: "", currentProgress: 0, total: 0, progressPercentage: 0 }
         };
+
+        this.canUpdateProgress = true;
     }
+
+    handleProgress = longRunningTaskProgress => {
+        this.deferredProgress = longRunningTaskProgress;
+
+        if (this.canUpdateProgress) {
+            this.updateProgess(longRunningTaskProgress);
+            this.canUpdateProgress = false;
+            setTimeout(() => {
+                this.canUpdateProgress = true;
+                this.updateProgess(this.deferredProgress);
+            }, 100);
+        }
+    };
+
+    handleCompleted = () => {
+        this.setState({ selectedForCopy: undefined, longRunningTaskIsRunning: false });
+        this.handleNavigate(this.state.currentPath);
+    }
+
+    updateProgess = longRunningTaskProgress => this.setState({ longRunningTaskProgress, intPercentage: Math.round(longRunningTaskProgress.progressPercentage * 100) });
 
     async componentDidMount() {
         const response = await fetch('api/FileSystem/drives');
@@ -36,6 +61,8 @@ export class Home extends Component {
         this.connection = new signalR.HubConnectionBuilder().withUrl("/fileSystemHub").build();
 
         this.connection.on('DirectoryChanged', this.handleDirectoryChanged);
+        this.connection.on('CopyDirectoryProgress', this.handleProgress);
+        this.connection.on('CopyDirectoryCompleted', this.handleCompleted);
 
         try {
             await this.connection.start();
@@ -44,6 +71,10 @@ export class Home extends Component {
             console.log('Connection failed', err);
         }
     }
+
+    toggleLongRunningTaskIsRunning = () => this.setState({
+        longRunningTaskIsRunning: !this.state.longRunningTaskIsRunning
+    });
 
     componentWillUnmount() {
         document.removeEventListener('keydown', this.handleGlobalKeyBoard);
@@ -68,7 +99,7 @@ export class Home extends Component {
                     !this.state.isEditingFileSystemEntry && this.handleDeleteEntry(this.state.currentFileSystemEntry);
                     break;
                 case 'c':
-                    event.ctrlKey && this.state.currentFileSystemEntry.kind === 1 && this.handleSelectedForCopy({ item: this.state.currentFileSystemEntry });
+                    event.ctrlKey && this.handleSelectedForCopy({ item: this.state.currentFileSystemEntry });
                     break;
                 default: break;
             }
@@ -199,15 +230,19 @@ export class Home extends Component {
     });
 
     handlePaste = async ({ source }) => {
+        const apiPart = source.kind === 0 ? 'dirs' : 'files';
         const destination = `${this.state.currentPath}/${source.name}`;
-        const result = await fetch(`/api/FileSystem/files/copy?source=${source.fullName}&destination=${destination}`, {
-            method: 'POST'
+
+        this.setState({
+            longRunningTaskName: `Copying ${source.name} into ${this.state.currentPath}`,
+            longRunningTaskIsRunning: true,
         });
 
-        if (result.ok) {
-            this.setState({ selectedForCopy: undefined });
-            this.handleNavigate(this.state.currentPath);
-        } else {
+        const result = await fetch(`/api/FileSystem/${apiPart}/copy?source=${source.fullName}&destination=${destination}`, {
+            method: 'POST'
+        });
+        
+        if (!result.ok) {
             const error = await result.json();
             alert(error.message);
         }
@@ -255,6 +290,17 @@ export class Home extends Component {
                     onPaste={this.handlePaste}
                     x={this.state.contextMenuPosition.x}
                     y={this.state.contextMenuPosition.y} />
+
+                <Modal isOpen={this.state.longRunningTaskIsRunning}
+                    toggle={this.toggleLongRunningTaskIsRunning}>
+                    <ModalHeader toggle={this.toggleLongRunningTaskIsRunning}>
+                        {this.state.longRunningTaskName}
+                    </ModalHeader>
+                    <ModalBody>
+                        <label>{this.state.longRunningTaskProgress.task}</label>
+                        <Progress value={this.state.longRunningTaskProgress.currentProgress} max={this.state.longRunningTaskProgress.total} animated={false} />
+                    </ModalBody>
+                </Modal>
             </div>
         );
     }

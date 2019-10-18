@@ -12,7 +12,7 @@ namespace Itof.Core
 
         public long Total { get; }
 
-        public decimal ProgressPercentage => Total != 0 ? CurrentProgress / Total : 0;
+        public decimal ProgressPercentage => Total != 0 ? CurrentProgress / (decimal)Total : 0;
 
         public Progress(string task, long currentProgress, long total) : this()
         {
