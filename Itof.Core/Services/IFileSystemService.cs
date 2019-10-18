@@ -23,5 +23,7 @@ namespace Itof.Core.Services
         void MoveFileSystemEntry(string path, string newPath);
 
         void CopyFile(string sourceFile, string destinationFile);
+
+        void CopyDirectory(string sourceDirectory, string targetDirectory, Action<Progress> progress);
     }
 }

@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using Itof.Core;
 using Itof.Core.Services;
 using Itof.UI.Filters;
+using Itof.UI.Hubs;
 using Itof.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -18,10 +20,12 @@ namespace Itof.UI.Controllers
     public class FileSystemController : Controller
     {
         private readonly IFileSystemService _filesystem;
+        private readonly IHubContext<FileSystemHub> _hub;
 
-        public FileSystemController(IFileSystemService fileSystem)
+        public FileSystemController(IFileSystemService fileSystem, IHubContext<FileSystemHub> hub)
         {
             _filesystem = fileSystem;
+            _hub = hub;
         }
 
         [HttpGet("drives")]
@@ -38,6 +42,10 @@ namespace Itof.UI.Controllers
 
         [HttpDelete("dirs")]
         public void RemoveDirectory(string path) => _filesystem.RemoveDirectory(path);
+
+        [HttpPost("dirs/copy")]
+        public void CopyDirectory(string source, string destination) 
+            => _filesystem.CopyDirectory(source, destination, progress => _hub.Clients.All.SendAsync("copyDirectoryProgress", progress));
 
         [HttpGet("files")]
         public IEnumerable<FileSystemNode> Files(string path = "/", string orderByName = "asc") => _filesystem.ListFiles(path).OrderBy(f => f.Name, new NaturalSortComparer());
