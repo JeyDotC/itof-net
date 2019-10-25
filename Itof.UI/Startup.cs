@@ -5,6 +5,7 @@ using Itof.Core.Services;
 using Itof.LocalFileSystem;
 using Itof.UI.Hubs;
 using Itof.UI.Services;
+using Itof.UI.Services.ProcessLauncherInvokers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,7 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 using System.Threading.Tasks;
 
 namespace Itof.UI
@@ -39,6 +41,11 @@ namespace Itof.UI
             services.AddTransient<IFileSystemService>(p => new LocalFileSystemService(p.GetService<IMimeMapService>()));
             services.AddSingleton<FileSystemWatcherBridge>();
             services.AddSingleton(HostPlatform.FromCurrentPlatform());
+            services.AddSingleton<IProcessLauncherInvoker>(p => Environment.OSVersion.Platform switch
+            {
+                PlatformID.Win32NT => new WindowsProcessLauncherInvoker(),
+                _ => new UnixProcessLauncherInvoker(),
+            }); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
