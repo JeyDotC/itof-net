@@ -5,12 +5,15 @@ using Itof.Core.Services;
 using Itof.LocalFileSystem;
 using Itof.UI.Hubs;
 using Itof.UI.Services;
+using Itof.UI.Services.ProcessLauncherInvokers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using System;
 using System.Threading.Tasks;
 
 namespace Itof.UI
@@ -27,22 +30,26 @@ namespace Itof.UI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/build";
             });
+            services.AddControllers();
             services.AddSignalR();
             services.AddSingleton<IMimeMapService>(p => new AspNetMimeMapService());
             services.AddTransient<IFileSystemService>(p => new LocalFileSystemService(p.GetService<IMimeMapService>()));
             services.AddSingleton<FileSystemWatcherBridge>();
             services.AddSingleton(HostPlatform.FromCurrentPlatform());
+            services.AddSingleton<IProcessLauncherInvoker>(p => Environment.OSVersion.Platform switch
+            {
+                PlatformID.Win32NT => new WindowsProcessLauncherInvoker(),
+                _ => new UnixProcessLauncherInvoker(),
+            }); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -55,15 +62,16 @@ namespace Itof.UI
 
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
+            app.UseRouting();
 
-            app.UseMvc(routes =>
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "default",
-                    template: "{controller}/{action=Index}/{id?}");
+                    pattern: "{controller}/{action=Index}/{id?}");
             });
 
-            app.UseSignalR(routes =>
+            app.UseEndpoints(routes =>
             {
                 routes.MapHub<FileSystemHub>("/fileSystemHub");
             });
