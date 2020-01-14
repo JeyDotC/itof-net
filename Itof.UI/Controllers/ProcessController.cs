@@ -31,7 +31,7 @@ namespace Itof.UI.Controllers
             => _processLauncherInvoker.StartTerminal(new DirectoryInfo(at));
 
         [HttpPost("OsOpen")]
-        public void OpenFile(string file)
-            => _processLauncherInvoker.OpenFile(new FileInfo(file));
+        public void OpenFile(string file, string openWith = "")
+            => _processLauncherInvoker.OpenFile(new FileInfo(file), openWith);
     }
 }

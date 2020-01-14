@@ -18,7 +18,7 @@ namespace Itof.UI.Services.ProcessLauncherInvokers
                 Arguments = string.Join(' ', "./Itof.ProcessLauncher.dll", process, workingDir.FullName, parameters ?? string.Empty)
             });
 
-        public abstract void OpenFile(FileInfo fileToOpen);
+        public abstract void OpenFile(FileInfo fileToOpen, string openWith = "");
 
         public abstract void StartTerminal(DirectoryInfo workingDirectory);
     }

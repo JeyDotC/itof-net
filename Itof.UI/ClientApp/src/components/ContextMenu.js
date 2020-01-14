@@ -66,9 +66,14 @@ export default class ContextMenu extends React.Component {
         this.props.onPaste({ source: this.props.selectedForCopy, pasteKind: "copy" });
     }
 
+    handleOpenWith = e => {
+        this.props.onOpenWith({ item: this.props.selectedItem });
+    }
+
     render() {
         const selectedBlank = !this.props.selectedItem || this.props.selectedItem.name === undefined;
         const canPaste = selectedBlank && this.props.selectedForCopy !== undefined;
+        const isFile = this.props.selectedItem && this.props.selectedItem.kind === 1;
 
         return (<div className="dropdown-menu" style={{
             display: this.props.show ? 'block' : 'none',
@@ -77,6 +82,9 @@ export default class ContextMenu extends React.Component {
             top: this.props.y
         }}>
             {canPaste && <button className="dropdown-item" type="button" onClick={this.handlePaste}>Paste</button>}
+            {/*{(!selectedBlank && isFile) &&*/}
+                <button className="dropdown-item" type="button" onClick={this.handleOpenWith}>Open With...</button>
+            {/**/}
             {!selectedBlank && <button className="dropdown-item" type="button" onClick={this.handleSelectForCopy}>Copy</button>}
             {!selectedBlank && <button className="dropdown-item" type="button" onClick={this.handleRename}>Rename</button>}
             {!selectedBlank && <button className={classNames("dropdown-item", "text-danger")} type="button" onClick={() => this.props.onDeleteEntry(this.props.selectedItem)}>Delete</button>}

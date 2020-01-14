@@ -2,6 +2,7 @@ using ElectronNET.API;
 using ElectronNET.API.Entities;
 using Itof.Core;
 using Itof.Core.Services;
+using Itof.Host.Osx.Services;
 using Itof.LocalFileSystem;
 using Itof.UI.Hubs;
 using Itof.UI.Services;
@@ -41,11 +42,15 @@ namespace Itof.UI
             services.AddTransient<IFileSystemService>(p => new LocalFileSystemService(p.GetService<IMimeMapService>()));
             services.AddSingleton<FileSystemWatcherBridge>();
             services.AddSingleton(HostPlatform.FromCurrentPlatform());
+
             services.AddSingleton<IProcessLauncherInvoker>(p => Environment.OSVersion.Platform switch
             {
                 PlatformID.Win32NT => new WindowsProcessLauncherInvoker(),
                 _ => new UnixProcessLauncherInvoker(),
-            }); 
+            });
+            services.AddSingleton<IApplicationCatalog>(p => Environment.OSVersion.Platform switch {
+                _ => new OsxApplicationCatalog(p.GetRequiredService<IFileSystemService>())
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

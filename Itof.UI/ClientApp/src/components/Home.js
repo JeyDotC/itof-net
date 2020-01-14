@@ -4,6 +4,8 @@ import { NavMenu } from './NavMenu';
 import DirectoryTree from './DirectoryTree';
 import TableDirectoryView from './directoryViews/TableDirectoryView';
 import ContextMenu from './ContextMenu';
+import OpenWithMenu from './OpenWithMenu';
+
 import * as signalR from '@aspnet/signalr';
 
 export class Home extends Component {
@@ -24,7 +26,8 @@ export class Home extends Component {
             isEditingFileSystemEntry: false,
             longRunningTaskName: "",
             longRunningTaskIsRunning: false,
-            longRunningTaskProgress: { task: "", currentProgress: 0, total: 0, progressPercentage: 0 }
+            longRunningTaskProgress: { task: "", currentProgress: 0, total: 0, progressPercentage: 0 },
+            openWithRequested: false,
         };
 
         this.canUpdateProgress = true;
@@ -76,6 +79,10 @@ export class Home extends Component {
         longRunningTaskIsRunning: !this.state.longRunningTaskIsRunning
     });
 
+    toggleOpenWithRequested = () => this.setState({
+        openWithRequested: !this.state.openWithRequested
+    });
+
     componentWillUnmount() {
         document.removeEventListener('keydown', this.handleGlobalKeyBoard);
     }
@@ -125,9 +132,12 @@ export class Home extends Component {
         }
     }
 
-    openFile = fullName => fetch(`/api/Process/OsOpen?file=${fullName}`, {
-        method: 'POST'
-    });
+    openFile = (fullName, appName = undefined) => {
+        const openWith = appName ? `&openWith=${appName}` : '';
+        return fetch(`/api/Process/OsOpen?file=${fullName}${openWith}`, {
+            method: 'POST'
+        });
+    }
 
     handleItemSelected = ({ item, edit = false }) => {
         let currentItem = item;
@@ -248,6 +258,13 @@ export class Home extends Component {
         }
     }
 
+    handleOpenWith = ({item}) => this.setState({ openWithRequested: true, selectedItem: item });
+
+    handleOpenFileWith = app => {
+        this.openFile(this.state.selectedItem.fullName, app.path);
+        this.setState({ openWithRequested: false });
+    }
+
     render() {
         return (
             <div style={{ paddingTop: '70px', minHeight: '600px' }}
@@ -266,6 +283,7 @@ export class Home extends Component {
                                 isEditingFileSystemEntry={this.state.isEditingFileSystemEntry}
                                 directories={this.state.directoriesAtCurrentPath}
                                 files={this.state.filesAtCurrentPath}
+
                                 onItemSelected={this.handleItemSelected}
                                 onSetEntryName={this.handleSetEntryName}
                                 onItemOpen={this.handleItemOpen}
@@ -277,19 +295,23 @@ export class Home extends Component {
                     </Row>
                 </Container>
                 <ContextMenu
+                    x={this.state.contextMenuPosition.x}
+                    y={this.state.contextMenuPosition.y}
+
                     selectedItem={this.state.currentFileSystemEntry}
                     selectedForCopy={this.state.selectedForCopy}
                     show={this.state.contextMenuOpen}
                     currentPath={this.state.currentPath}
                     directoriesAtCurrentPath={this.state.directoriesAtCurrentPath}
                     filesAtCurrentPath={this.state.filesAtCurrentPath}
+
                     onNavigate={this.handleNavigate}
                     onDeleteEntry={this.handleDeleteEntry}
                     onItemSelected={this.handleItemSelected}
                     onSelectedForCopy={this.handleSelectedForCopy}
                     onPaste={this.handlePaste}
-                    x={this.state.contextMenuPosition.x}
-                    y={this.state.contextMenuPosition.y} />
+                    onOpenWith={this.handleOpenWith}
+                    />
 
                 <Modal isOpen={this.state.longRunningTaskIsRunning}
                     toggle={this.toggleLongRunningTaskIsRunning}>
@@ -299,6 +321,16 @@ export class Home extends Component {
                     <ModalBody>
                         <label>{this.state.longRunningTaskProgress.task}</label>
                         <Progress value={this.state.longRunningTaskProgress.currentProgress} max={this.state.longRunningTaskProgress.total} animated={false} />
+                    </ModalBody>
+                </Modal>
+
+                <Modal isOpen={this.state.openWithRequested}
+                    toggle={this.toggleOpenWithRequested}>
+                    <ModalHeader toggle={this.toggleOpenWithRequested}>
+                        Open <em>{this.state.openWithRequested && this.state.selectedItem.name}</em> with:
+                    </ModalHeader>
+                    <ModalBody>
+                        <OpenWithMenu onOpenFileWith={this.handleOpenFileWith} />
                     </ModalBody>
                 </Modal>
             </div>

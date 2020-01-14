@@ -12,6 +12,6 @@ namespace Itof.UI.Services
 
         void StartTerminal(DirectoryInfo workingDirectory);
 
-        void OpenFile(FileInfo fileToOpen);
+        void OpenFile(FileInfo fileToOpen, string openWith = "");
     }
 }
