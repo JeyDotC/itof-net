@@ -261,7 +261,7 @@ export class Home extends Component {
     handleOpenWith = ({item}) => this.setState({ openWithRequested: true, selectedItem: item });
 
     handleOpenFileWith = app => {
-        this.openFile(this.state.selectedItem.fullName, app.path);
+        this.openFile(this.state.selectedItem.fullName, app.name);
         this.setState({ openWithRequested: false });
     }
 

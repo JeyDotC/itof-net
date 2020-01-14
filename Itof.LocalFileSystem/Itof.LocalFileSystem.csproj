@@ -7,4 +7,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Itof.Core\Itof.Core.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ExtensionMethods\" />
+  </ItemGroup>
 </Project>

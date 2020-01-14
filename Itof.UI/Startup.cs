@@ -40,6 +40,7 @@ namespace Itof.UI
             services.AddSignalR();
             services.AddSingleton<IMimeMapService>(p => new AspNetMimeMapService());
             services.AddTransient<IFileSystemService>(p => new LocalFileSystemService(p.GetService<IMimeMapService>()));
+            services.AddTransient<ISearchFilesService>(p => new LocalSearchFilesService(p.GetService<IMimeMapService>()));
             services.AddSingleton<FileSystemWatcherBridge>();
             services.AddSingleton(HostPlatform.FromCurrentPlatform());
 
@@ -49,7 +50,7 @@ namespace Itof.UI
                 _ => new UnixProcessLauncherInvoker(),
             });
             services.AddSingleton<IApplicationCatalog>(p => Environment.OSVersion.Platform switch {
-                _ => new OsxApplicationCatalog(p.GetRequiredService<IFileSystemService>())
+                _ => new OsxApplicationCatalog(p.GetRequiredService<ISearchFilesService>())
             });
         }
 
