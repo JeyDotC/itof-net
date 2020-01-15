@@ -19,14 +19,15 @@ namespace Itof.ProcessLauncher
             var process = args[0];
             var workingDir = args[1];
             var arguments = args.Skip(2).ToList();
+            var argumentsString = string.Join(' ', arguments);
 
-            Console.Out.WriteLine(workingDir);
+            Console.Out.WriteLine($"Launching {process} {argumentsString} at {workingDir}");
 
             using (System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
             {
                 FileName = process,
                 WorkingDirectory = workingDir,
-                Arguments = string.Join(' ', arguments),
+                Arguments = argumentsString,
                 WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden
             }))
             {

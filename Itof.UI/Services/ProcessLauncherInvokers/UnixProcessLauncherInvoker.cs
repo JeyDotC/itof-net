@@ -10,7 +10,7 @@ namespace Itof.UI.Services.ProcessLauncherInvokers
     {
         public override void OpenFile(FileInfo fileToOpen, string openWith = "")
         {
-            var openWithParameter = string.IsNullOrEmpty(openWith) ? string.Empty : $"-a \"{openWith}\" ";
+            var openWithParameter = string.IsNullOrEmpty(openWith) ? string.Empty : $"-a \"\"\"{openWith}\"\"\" ";
 
             StartProcess(fileToOpen.Directory, "open", $"{openWithParameter}\"{fileToOpen.FullName}\"");
         }

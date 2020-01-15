@@ -11,6 +11,7 @@ namespace System.IO
                     file.CreationTime,
                     file.LastWriteTime,
                     file.Length,
+                    Path.DirectorySeparatorChar.ToString(),
                     mime);
     }
 }
