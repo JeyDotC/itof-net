@@ -30,6 +30,8 @@ export class Home extends Component {
             openWithRequested: false,
         };
 
+        this.osApps = [];
+
         this.canUpdateProgress = true;
     }
 
@@ -60,6 +62,9 @@ export class Home extends Component {
         this.setState({ drives: data });
 
         document.addEventListener('keydown', this.handleGlobalKeyBoard);
+
+        const applicationsRespone = await fetch('api/Host/applications');
+        this.osApps = await applicationsRespone.json();
 
         this.connection = new signalR.HubConnectionBuilder().withUrl("/fileSystemHub").build();
 
@@ -331,7 +336,7 @@ export class Home extends Component {
                         Open <em>{this.state.openWithRequested && this.state.selectedItem.name}</em> with:
                     </ModalHeader>
                     <ModalBody>
-                        <OpenWithMenu onOpenFileWith={this.handleOpenFileWith} />
+                        <OpenWithMenu apps={this.osApps} onOpenFileWith={this.handleOpenFileWith} />
                     </ModalBody>
                 </Modal>
             </div>
