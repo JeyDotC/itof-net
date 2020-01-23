@@ -3,6 +3,7 @@ using ElectronNET.API.Entities;
 using Itof.Core;
 using Itof.Core.Services;
 using Itof.Host.Osx.Services;
+using Itof.Host.Windows.Services;
 using Itof.LocalFileSystem;
 using Itof.UI.Hubs;
 using Itof.UI.Services;
@@ -44,14 +45,27 @@ namespace Itof.UI
             services.AddSingleton<FileSystemWatcherBridge>();
             services.AddSingleton(HostPlatform.FromCurrentPlatform());
 
-            services.AddSingleton<IProcessLauncherInvoker>(p => Environment.OSVersion.Platform switch
+            switch (Environment.OSVersion.Platform)
             {
-                PlatformID.Win32NT => new WindowsProcessLauncherInvoker(),
-                _ => new UnixProcessLauncherInvoker(),
-            });
-            services.AddSingleton<IApplicationCatalog>(p => Environment.OSVersion.Platform switch {
-                _ => new OsxApplicationCatalog(p.GetRequiredService<ISearchFilesService>())
-            });
+                case PlatformID.Win32NT: 
+                    WindowsSpecificServices(services);
+                    break;
+                default:
+                    UnixSpecificServices(services);
+                    break;
+            }
+        }
+
+        private void WindowsSpecificServices(IServiceCollection services)
+        {
+            services.AddSingleton<IProcessLauncherInvoker, WindowsProcessLauncherInvoker>();
+            services.AddSingleton<IApplicationCatalog, WindowsApplicationCatalog>();
+        }
+
+        private void UnixSpecificServices(IServiceCollection services)
+        {
+            services.AddSingleton<IProcessLauncherInvoker, UnixProcessLauncherInvoker>();
+            services.AddSingleton<IApplicationCatalog, OsxApplicationCatalog>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
