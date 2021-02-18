@@ -2,19 +2,25 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHdd } from '@fortawesome/free-solid-svg-icons'
 import humanFileSize from '../services/humanFileSize';
+import ProgressLine from './ProgressLine';
 
 export default class DriveTreeNode extends Component {
     static displayName = DriveTreeNode.name;
     
     render() {
-        const freeSpace = humanFileSize(this.props.drive.totalFreeSpace);
-        const totalSpace = humanFileSize(this.props.drive.totalSize);
+        // Space in bytes.
+        const { totalFreeSpace, totalSize } = this.props.drive;
+        const availablePercent = 1 - (totalSize > 0 ? totalFreeSpace / totalSize : 0);
+
+        const humanReadableTotalFreeSpace = humanFileSize(totalFreeSpace);
+        const humanReadableTotalSize = humanFileSize(totalSize);
 
         return (
             <Fragment>
                 <FontAwesomeIcon icon={faHdd} />
                 <strong> {this.props.drive.name}</strong> <br />
-                <small className="text-muted">{freeSpace} available of {totalSpace} </small>
+                <ProgressLine percentage={availablePercent} />
+                <small className="text-muted">{humanReadableTotalFreeSpace} available of {humanReadableTotalSize} </small>
             </Fragment>
         );
     }
