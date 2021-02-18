@@ -108,7 +108,7 @@ export class Home extends Component {
                     this.setState({ isEditingFileSystemEntry: true });
                     break;
                 case 'Delete':
-                    !this.state.isEditingFileSystemEntry && this.handleDeleteEntry(this.state.currentFileSystemEntry);
+                    !this.state.isEditingFileSystemEntry && !this.state.openWithRequested && this.handleDeleteEntry(this.state.currentFileSystemEntry);
                     break;
                 case 'c':
                     event.ctrlKey && this.handleSelectedForCopy({ item: this.state.currentFileSystemEntry });
@@ -336,7 +336,7 @@ export class Home extends Component {
                         Open <em>{this.state.openWithRequested && this.state.selectedItem.name}</em> with:
                     </ModalHeader>
                     <ModalBody>
-                        <OpenWithMenu apps={this.osApps} onOpenFileWith={this.handleOpenFileWith} />
+                        <OpenWithMenu apps={this.osApps} onOpenFileWith={this.handleOpenFileWith} isOpen={this.state.openWithRequested} />
                     </ModalBody>
                 </Modal>
             </div>
