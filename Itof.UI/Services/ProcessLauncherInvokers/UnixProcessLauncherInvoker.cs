@@ -8,8 +8,12 @@ namespace Itof.UI.Services.ProcessLauncherInvokers
 {
     class UnixProcessLauncherInvoker : ProcessLauncherInvokerBase
     {
-        public override void OpenFile(FileInfo fileToOpen) 
-            => StartProcess(fileToOpen.Directory, "open", $"\"{fileToOpen.FullName}\"");
+        public override void OpenFile(FileInfo fileToOpen, string openWith = "")
+        {
+            var openWithParameter = string.IsNullOrEmpty(openWith) ? string.Empty : $"-a \"\"\"{openWith}\"\"\" ";
+
+            StartProcess(fileToOpen.Directory, "open", $"{openWithParameter}\"{fileToOpen.FullName}\"");
+        }
 
         public override void StartTerminal(DirectoryInfo workingDirectory)
             => StartProcess(workingDirectory, "open", $"-a Terminal \"{workingDirectory.FullName}\"");

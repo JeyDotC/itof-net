@@ -15,10 +15,10 @@ namespace Itof.UI.Services.ProcessLauncherInvokers
                 FileName = "dotnet",
                 WindowStyle = ProcessWindowStyle.Hidden,
                 WorkingDirectory = AppContext.BaseDirectory,
-                Arguments = string.Join(' ', "./Itof.ProcessLauncher.dll", process, workingDir.FullName, parameters ?? string.Empty)
+                Arguments = $"./Itof.ProcessLauncher.dll {process} {workingDir.FullName} {parameters ?? string.Empty}"
             });
 
-        public abstract void OpenFile(FileInfo fileToOpen);
+        public abstract void OpenFile(FileInfo fileToOpen, string openWith = "");
 
         public abstract void StartTerminal(DirectoryInfo workingDirectory);
     }

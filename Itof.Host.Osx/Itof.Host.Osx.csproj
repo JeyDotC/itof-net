@@ -5,9 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Itof.Core\Itof.Core.csproj" />
+    <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ExtensionMethods\" />
+    <ProjectReference Include="..\Itof.Core\Itof.Core.csproj" />
   </ItemGroup>
 </Project>

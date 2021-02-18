@@ -23,7 +23,7 @@ namespace Itof.LocalFileSystem
 
         public IEnumerable<FileSystemNode> ListDirectories(string path)
             => new DirectoryInfo(path).EnumerateDirectories()
-                .Select(d => FileSystemNode.CreateDirectory(d.Name, path, d.CreationTime, d.LastWriteTime));
+                .Select(d => d.ToFilesystemNode(path));
 
         public IEnumerable<Drive> ListDrives()
             => DriveInfo.GetDrives()
@@ -31,14 +31,7 @@ namespace Itof.LocalFileSystem
 
         public IEnumerable<FileSystemNode> ListFiles(string path)
             => new DirectoryInfo(path).EnumerateFiles()
-                .Select(f => FileSystemNode.CreateFile(
-                    f.Name,
-                    f.Directory.FullName,
-                    f.CreationTime,
-                    f.LastWriteTime,
-                    f.Length,
-                    mime: _mimeMapService.GetMimeFromExtension((f.Extension ?? string.Empty).TrimStart('.'))
-                ));
+                .Select(f => f.ToFilesystemNode(_mimeMapService.GetMimeFromExtension((f.Extension ?? string.Empty).TrimStart('.'))));
 
         public void MoveFileSystemEntry(string path, string newPath) => Directory.Move(path, newPath);
 

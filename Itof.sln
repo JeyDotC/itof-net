@@ -3,18 +3,22 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29001.49
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Itof.UI", "Itof.UI\Itof.UI.csproj", "{FDB9DF81-65CE-4BAD-AC62-510D66749178}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Itof.UI", "Itof.UI\Itof.UI.csproj", "{FDB9DF81-65CE-4BAD-AC62-510D66749178}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DA6A6C45-FF9B-48DC-8FFA-18864EA76FE2}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Itof.Core", "Itof.Core\Itof.Core.csproj", "{A2F48AC5-C92B-4024-8059-69A1385AC9D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Itof.Core", "Itof.Core\Itof.Core.csproj", "{A2F48AC5-C92B-4024-8059-69A1385AC9D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Itof.LocalFileSystem", "Itof.LocalFileSystem\Itof.LocalFileSystem.csproj", "{225D27AE-033B-47A4-B6BB-98A7D6CE90C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Itof.LocalFileSystem", "Itof.LocalFileSystem\Itof.LocalFileSystem.csproj", "{225D27AE-033B-47A4-B6BB-98A7D6CE90C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Itof.ProcessLauncher", "Itof.ProcessLauncher\Itof.ProcessLauncher.csproj", "{8DC50CC4-17BD-44DD-A435-5D955F1F6DDF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Itof.ProcessLauncher", "Itof.ProcessLauncher\Itof.ProcessLauncher.csproj", "{8DC50CC4-17BD-44DD-A435-5D955F1F6DDF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Itof.Host.Osx", "Itof.Host.Osx\Itof.Host.Osx.csproj", "{AD086E43-77C4-454D-8DF2-43AE0F94D63A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Itof.Host.Windows", "Itof.Host.Windows\Itof.Host.Windows.csproj", "{6A642F66-E201-4755-BB47-51ED17F1A436}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +42,14 @@ Global
 		{8DC50CC4-17BD-44DD-A435-5D955F1F6DDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8DC50CC4-17BD-44DD-A435-5D955F1F6DDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8DC50CC4-17BD-44DD-A435-5D955F1F6DDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD086E43-77C4-454D-8DF2-43AE0F94D63A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD086E43-77C4-454D-8DF2-43AE0F94D63A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD086E43-77C4-454D-8DF2-43AE0F94D63A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD086E43-77C4-454D-8DF2-43AE0F94D63A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A642F66-E201-4755-BB47-51ED17F1A436}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A642F66-E201-4755-BB47-51ED17F1A436}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A642F66-E201-4755-BB47-51ED17F1A436}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A642F66-E201-4755-BB47-51ED17F1A436}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
