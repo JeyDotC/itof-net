@@ -117,6 +117,11 @@ namespace Itof.UI
             };
             var mainWindow = await Electron.WindowManager.CreateWindowAsync(options);
             mainWindow.OnReadyToShow += () => mainWindow.Show();
+            mainWindow.OnClosed += () =>
+            {
+                Electron.App.Exit(0);
+                Environment.Exit(0);
+            };
         }
     }
 }
