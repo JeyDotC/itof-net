@@ -1,7 +1,30 @@
-﻿.table-directory-view  .directory-row {
+﻿.table-directory-view {
+    --nav-height: calc(50px - 2px);
+    --row-height: 33px;
+    --heading-color: #dee2e6;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.table-directory-view .directory-row {
     cursor: pointer;
 }
 
 .table-directory-view  .file-row {
     cursor: pointer;
 }
+
+.table-directory-view thead > tr > th {
+    position: sticky;
+    top: var(--nav-height);
+    background-color: var(--heading-color);
+}
+
+    .table-directory-view tbody > tr:first-child > th,
+    .table-directory-view tbody > tr:first-child > td {
+        position: sticky;
+        top: calc(var(--nav-height) + var(--row-height) - 2px);
+        background-color: var(--heading-color);
+        border-bottom: 2px solid var(--heading-color);
+    }
+
