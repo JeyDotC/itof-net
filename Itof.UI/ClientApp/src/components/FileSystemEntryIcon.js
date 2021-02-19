@@ -10,15 +10,13 @@ library.add(far);
 library.add(fas);
 library.add(fab);
 
-export default class FileSystemEntryIcon extends React.Component {
+export default function FileSystemEntryIcon(props) {
 
-    render() {
-        const entry = this.props.entry;
-        const isFolder = entry.kind === 0;
-        const icon = isFolder ? 'folder' : IconMap.getByMime(entry.mime);
+    const { entry, color } = props;
+    const isFolder = entry.kind === 0;
+    const icon = isFolder ? 'folder' : IconMap.getByMime(entry.mime);
 
-        return (
-             <FontAwesomeIcon icon={icon} color={this.props.color} size={'1x'} />
-        );
-    }
+    return (
+        <FontAwesomeIcon icon={icon} color={color} size={'1x'} />
+    );
 }
