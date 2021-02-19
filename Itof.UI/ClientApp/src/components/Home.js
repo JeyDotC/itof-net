@@ -163,6 +163,11 @@ export class Home extends Component {
     }
 
     handleNavigate = path => new Promise(async (resolve, reject) => {
+        if (!path) {
+            resolve(path);
+            return;
+        }
+
         const result = await Promise.all([
             fetch(`api/FileSystem/dirs?path=${path}`),
             fetch(`api/FileSystem/files?path=${path}`)
