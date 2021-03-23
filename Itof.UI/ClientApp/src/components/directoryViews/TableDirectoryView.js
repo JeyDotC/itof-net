@@ -51,7 +51,7 @@ export default function TableDirectoryView(props) {
         const isFolder = entry.kind === 0;
         const isFile = entry.kind === 1;
         const isCurrentlyPickedEntry = entry.fullName === (currentFileSystemEntry || { fullName: undefined }).fullName;
-        const isEditingFileSystemEntry = isCurrentlyPickedEntry && isEditingFileSystemEntry;
+        const isEditingFileSystemEntryName = isCurrentlyPickedEntry && isEditingFileSystemEntry;
         const dateFormat = "PP 'at' pp";
         const { dateCreated, dateModified } = entry;
 
@@ -69,8 +69,8 @@ export default function TableDirectoryView(props) {
                 <FileSystemEntryIcon entry={entry} color={color} />
             </td>
             <th scope="row">
-                {isEditingFileSystemEntry && <EntryNameEditor value={entry.name} onFinishEdit={onFinishEdit} onSetEntryName={onSetEntryName} />}
-                {!isEditingFileSystemEntry && entry.name}
+                {isEditingFileSystemEntryName && <EntryNameEditor value={entry.name} onFinishEdit={onFinishEdit} onSetEntryName={onSetEntryName} />}
+                {!isEditingFileSystemEntryName && entry.name}
             </th>
             <td className="text-right"><small>{dateCreated && format(parseISO(dateCreated), dateFormat)}</small></td>
             <td className="text-right"><small>{dateModified && format(parseISO(dateModified), dateFormat)}</small></td>
