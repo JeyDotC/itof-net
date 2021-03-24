@@ -10,7 +10,7 @@ namespace Itof.LocalFileSystem
 {
     public class LocalFileSystemService : IFileSystemService
     {
-        private IMimeMapService _mimeMapService;
+        private readonly IMimeMapService _mimeMapService;
 
         public LocalFileSystemService(IMimeMapService mimeMapService)
         {
@@ -50,18 +50,18 @@ namespace Itof.LocalFileSystem
             var totalFileBytes = allFiles.Sum(f => f.Length);
             progress(new Progress("Calculating...", 1, 1));
 
-            var copiedFileBytes = 0l;
+            var copiedFileBytes = 0L;
 
             progress(new Progress("Copying...", copiedFileBytes, totalFileBytes));
 
             foreach (var dir in Directory.EnumerateDirectories(sourceDirectory, "*", SearchOption.AllDirectories))
             {
-                Directory.CreateDirectory(Path.Combine(targetDirectory, dir.Substring(sourceDirectory.Length + 1)));
+                Directory.CreateDirectory(Path.Combine(targetDirectory, dir[(sourceDirectory.Length + 1)..]));
             }
 
             foreach (var file in allFiles)
             {
-                var relativeFilePath = file.FullName.Substring(sourceDirectory.Length);
+                var relativeFilePath = file.FullName[sourceDirectory.Length..];
                 progress(new Progress($"Copying {relativeFilePath}...", copiedFileBytes, totalFileBytes));
                 await Task.Run(() => file.CopyTo(Path.Combine(targetDirectory, relativeFilePath)));
                 copiedFileBytes += file.Length;

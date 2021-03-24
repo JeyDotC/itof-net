@@ -47,7 +47,7 @@ namespace Itof.UI
 
             switch (Environment.OSVersion.Platform)
             {
-                case PlatformID.Win32NT: 
+                case PlatformID.Win32NT:
                     WindowsSpecificServices(services);
                     break;
                 default:
@@ -56,13 +56,13 @@ namespace Itof.UI
             }
         }
 
-        private void WindowsSpecificServices(IServiceCollection services)
+        private static void WindowsSpecificServices(IServiceCollection services)
         {
             services.AddSingleton<IProcessLauncherInvoker, WindowsProcessLauncherInvoker>();
             services.AddSingleton<IApplicationCatalog, WindowsApplicationCatalog>();
         }
 
-        private void UnixSpecificServices(IServiceCollection services)
+        private static void UnixSpecificServices(IServiceCollection services)
         {
             services.AddSingleton<IProcessLauncherInvoker, UnixProcessLauncherInvoker>();
             services.AddSingleton<IApplicationCatalog, OsxApplicationCatalog>();
