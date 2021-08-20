@@ -1,29 +1,23 @@
-﻿import React from 'react';
+﻿import React, { useState } from 'react';
 
-export default class EntryNameEditor extends React.Component {
+export default function EntryNameEditor(props) {
+    const { value, onSetEntryName, onFinishEdit } = props;
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            entryName: this.props.value
-        };
-    }
+    const [entryName, setEntryName] = useState(value);
 
-    handleFocus = e => {
+    const handleFocus = e => {
         e.target.select();
     }
 
-    handleChange = e => {
-        this.setState({
-            entryName: e.target.value
-        });
+    const handleChange = e => {
+        setEntryName(e.target.value);
     }
 
-    handleKeyDown = e => {
+    const handleKeyDown = e => {
         if (e.key === 'Enter') {
             e.preventDefault();
-            if(this.state.entryName !== this.props.value){
-                this.props.onSetEntryName(this.state.entryName);
+            if (entryName !== value) {
+                onSetEntryName(entryName);
             } else {
                 e.target.blur();
             }
@@ -34,16 +28,14 @@ export default class EntryNameEditor extends React.Component {
         }
     }
 
-    render() {
-        return (<input
-            className="form-control"
-            type="text"
-            value={this.state.entryName}
-            ref={input => input && input.focus()}
-            onFocus={this.handleFocus}
-            onBlur={this.props.onFinishEdit}
-            onChange={this.handleChange}
-            onKeyDown={this.handleKeyDown}
-            onClick={e => e.stopPropagation()}/>);
-    }
+    return (<input
+        className="form-control"
+        type="text"
+        value={entryName}
+        ref={input => input && input.focus()}
+        onFocus={handleFocus}
+        onBlur={onFinishEdit}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
+        onClick={e => e.stopPropagation()} />);
 }

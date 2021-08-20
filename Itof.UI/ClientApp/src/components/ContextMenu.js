@@ -2,23 +2,37 @@
 import classNames from 'classnames';
 import { proposeFolderName, proposeFileName } from "../services/NameProposer"
 
-export default class ContextMenu extends React.Component {
+export default function ContextMenu(props) {
+    const {
+        x,
+        y,
+        selectedItem,
+        currentPath,
+        directoriesAtCurrentPath,
+        filesAtCurrentPath,
+        selectedForCopy,
+        onNavigate,
+        onItemSelected,
+        onSelectedForCopy,
+        onPaste,
+        onOpenWith,
+        onDeleteEntry,
+        show,
+    } = props;
 
-    handleCopyAsPath = () => {
-        navigator.clipboard.writeText(this.props.selectedItem.fullName);
+    const handleCopyAsPath = () => {
+        navigator.clipboard.writeText(selectedItem.fullName);
     }
 
-    handleOpenTerminal = () => {
-        const fullName = this.props.selectedItem.kind === 0 ? this.props.selectedItem.fullName : this.props.selectedItem.directory;
+    const handleOpenTerminal = () => {
+        const fullName = selectedItem.kind === 0 ? selectedItem.fullName : selectedItem.directory;
         fetch(`/api/Process/OsTerminal?at=${fullName}`, {
             method: 'POST'
         });
     }
 
-    handleCreateDirectory = async () => {
+    const handleCreateDirectory = async () => {
         console.log('handleCreateDirectory');
-        const currentPath = this.props.currentPath;
-        const directoriesAtCurrentPath = this.props.directoriesAtCurrentPath;
         const newFullFolderName = proposeFolderName({ currentPath, directoriesAtCurrentPath });
 
         const response = await fetch(`/api/FileSystem/dirs?path=${newFullFolderName.fullName}`, {
@@ -26,17 +40,15 @@ export default class ContextMenu extends React.Component {
         });
 
         if (response.ok) {
-            await this.props.onNavigate(currentPath)
-            this.props.onItemSelected({ item: newFullFolderName.name, edit: true });
+            await onNavigate(currentPath)
+            onItemSelected({ item: newFullFolderName.name, edit: true });
         } else {
             const data = await response.json();
             alert(data.message);
         }
     }
 
-    handleCreateFile = async () => {
-        const currentPath = this.props.currentPath;
-        const filesAtCurrentPath = this.props.filesAtCurrentPath;
+    const handleCreateFile = async () => {
         const newFullFileName = proposeFileName({ currentPath, filesAtCurrentPath });
 
         const response = await fetch(`/api/FileSystem/files?path=${newFullFileName.fullName}`, {
@@ -44,54 +56,54 @@ export default class ContextMenu extends React.Component {
         })
 
         if (response.ok) {
-            await this.props.onNavigate(currentPath);
-            this.props.onItemSelected({ item: newFullFileName.name, edit: true });
+            await onNavigate(currentPath);
+            onItemSelected({ item: newFullFileName.name, edit: true });
         } else {
             const data = await response.json();
             alert(data.message);
         }
     }
 
-    handleRename = e => {
+    const handleRename = e => {
         e.stopPropagation();
         e.preventDefault();
-        this.props.onItemSelected({ item: this.props.selectedItem, edit: true });
+        onItemSelected({ item: selectedItem, edit: true });
     }
 
-    handleSelectForCopy = e => {
-        this.props.onSelectedForCopy({ item: this.props.selectedItem });
+    const handleSelectForCopy = e => {
+        onSelectedForCopy({ item: selectedItem });
     }
 
-    handlePaste = e => {
-        this.props.onPaste({ source: this.props.selectedForCopy, pasteKind: "copy" });
+    const handlePaste = e => {
+        onPaste({ source: selectedForCopy, pasteKind: "copy" });
     }
 
-    handleOpenWith = e => {
-        this.props.onOpenWith({ item: this.props.selectedItem });
+    const handleOpenWith = e => {
+        onOpenWith({ item: selectedItem });
     }
 
-    render() {
-        const selectedBlank = !this.props.selectedItem || this.props.selectedItem.name === undefined;
-        const canPaste = selectedBlank && this.props.selectedForCopy !== undefined;
 
-        return (<div className="dropdown-menu" style={{
-            display: this.props.show ? 'block' : 'none',
-            position: 'fixed',
-            left: this.props.x,
-            top: this.props.y
-        }}>
-            {canPaste && <button className="dropdown-item" type="button" onClick={this.handlePaste}>Paste</button>}
-            
-            <button className="dropdown-item" type="button" onClick={this.handleOpenWith}>Open With...</button>
-            {!selectedBlank && <button className="dropdown-item" type="button" onClick={this.handleSelectForCopy}>Copy</button>}
-            {!selectedBlank && <button className="dropdown-item" type="button" onClick={this.handleRename}>Rename</button>}
-            {!selectedBlank && <button className={classNames("dropdown-item", "text-danger")} type="button" onClick={() => this.props.onDeleteEntry(this.props.selectedItem)}>Delete</button>}
-            {(!selectedBlank || canPaste) && <div className="dropdown-divider"></div>}
-            <button className="dropdown-item" type="button" onClick={this.handleOpenTerminal}>Open Terminal Here</button>
-            <button className="dropdown-item" type="button" onClick={this.handleCopyAsPath}>Copy Path</button>
-            <div className="dropdown-divider"></div>
-            <button className="dropdown-item" type="button" onClick={this.handleCreateDirectory}>Create Directory</button>
-            <button className="dropdown-item" type="button" onClick={this.handleCreateFile}>Create File</button>
-        </div>);
-    }
+    const selectedBlank = !selectedItem || selectedItem.name === undefined;
+    const canPaste = selectedBlank && selectedForCopy !== undefined;
+
+    return (<div className="dropdown-menu" style={{
+        display: show ? 'block' : 'none',
+        position: 'fixed',
+        left: x,
+        top: y
+    }}>
+        {canPaste && <button className="dropdown-item" type="button" onClick={handlePaste}>Paste</button>}
+
+        <button className="dropdown-item" type="button" onClick={handleOpenWith}>Open With...</button>
+        {!selectedBlank && <button className="dropdown-item" type="button" onClick={handleSelectForCopy}>Copy</button>}
+        {!selectedBlank && <button className="dropdown-item" type="button" onClick={handleRename}>Rename</button>}
+        {!selectedBlank && <button className={classNames("dropdown-item", "text-danger")} type="button" onClick={() => onDeleteEntry(selectedItem)}>Delete</button>}
+        {(!selectedBlank || canPaste) && <div className="dropdown-divider"></div>}
+        <button className="dropdown-item" type="button" onClick={handleOpenTerminal}>Open Terminal Here</button>
+        <button className="dropdown-item" type="button" onClick={handleCopyAsPath}>Copy Path</button>
+        <div className="dropdown-divider"></div>
+        <button className="dropdown-item" type="button" onClick={handleCreateDirectory}>Create Directory</button>
+        <button className="dropdown-item" type="button" onClick={handleCreateFile}>Create File</button>
+    </div>);
+
 }
